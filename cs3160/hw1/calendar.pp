@@ -14,11 +14,12 @@ PROGRAM calendar;
 		      ((Year MOD 100 <> 0) OR (Year MOD 400 = 0));
 	END; {IsLeapYear}
 	
-	FUNCTION numberDaysInMonth(month : Integer; year : Integer): Integer; 
+{	FUNCTION numberDaysInMonth(month : Integer; year : Integer): Integer; 
 	BEGIN
 		{returns the number of days in a month, taking into acount leap years} BEGIN 
 		numberDaysInMonth := 0;
 	END;
+}
 
 
 
@@ -28,20 +29,22 @@ BEGIN
 
 	year := 0;
 	month := 0;
+
 	{get user input for month and year, repeat until they get it right}
 	REPEAT 
 		write('Enter a year (1600-2400):');
 		Readln(year);
-		writeln(year);	
+		writeln(year)	
 	Until (year >=  1600) AND (year <= 2400);
 
 	REPEAT 
 		write('Enter a month (1-12):');
 		Readln(month);
-		writeln(month);	
+		writeln(month)	
 	Until (month >=  1) AND (month <= 12);
 
 	boolIsLeapYear := IsLeapYear(year);	
+
 
 	If (boolIsLeapYear = True) then
 		writeln(year,' is a leap year')
