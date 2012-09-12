@@ -1,10 +1,13 @@
 {CS 3160 HW1. UCCS fall 2012. Cody Hanson}
 PROGRAM calendar; 
 
+	Uses sysutils; { for string formatting}
+
 	VAR month : Integer;
 	    year  : Integer;
 	    input : String;
-	    boolIsLeapYear : Boolean;
+	    boolIsLeapYear : Boolean; 
+	    fmt,S : string;
 
 	FUNCTION IsLeapYear(Year: Integer): BOOLEAN;
 	{Returns TRUE if Year is a leap year, else FALSE}
@@ -92,6 +95,26 @@ PROGRAM calendar;
 	computeStartDay := day MOD 7;
 
 	END;
+	
+	PROCEDURE writeSeparator;
+	begin
+		Writeln('|---------------------------|');
+	end;
+
+	PROCEDURE writeDays;
+	begin
+		Writeln('| S | M | T | W | R | F | S |');
+	end;
+
+	PROCEDURE writeRows (month : integer);
+	Var startDay : Integer;
+	
+	begin
+		
+	end;
+
+
+
 
 BEGIN
 	writeln('#######################################');
@@ -113,16 +136,13 @@ BEGIN
 		writeln(month)	
 	Until (month >=  1) AND (month <= 12);
 
-	boolIsLeapYear := IsLeapYear(year);	
+	{input is now good.}
+	writeSeparator;
+	fmt := '|%0:13s %1:-13s|'; 
+	S:= Format(fmt,[getMonthName(month),IntToStr(year)]);
+	writeln(S);         	
+	writeDays;
 
-
-	If (boolIsLeapYear = True) then
-		writeln(year,' is a leap year')
-	else
-		writeln(year,' is NOT a leap year');
-
-	writeln(numberDaysInMonth(month,year),' days in ', getMonthName(month));
-	writeln('month started on: ', computeStartDay(month,year));
-
+	
 
 END. {end of program}
