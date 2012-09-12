@@ -14,14 +14,84 @@ PROGRAM calendar;
 		      ((Year MOD 100 <> 0) OR (Year MOD 400 = 0));
 	END; {IsLeapYear}
 	
-{	FUNCTION numberDaysInMonth(month : Integer; year : Integer): Integer; 
+	FUNCTION getMonthName(month:Integer) : string;
 	BEGIN
-		{returns the number of days in a month, taking into acount leap years} BEGIN 
-		numberDaysInMonth := 0;
+		Case month of
+		1 : 	getMonthName := 'January';
+		2 : 	getMonthName := 'February';
+		3 : 	getMonthName := 'March';
+		4 : 	getMonthName := 'April'; 
+		5 : 	getMonthName := 'May'; 
+		6 : 	getMonthName := 'June'; 
+		7 : 	getMonthName := 'July'; 
+		8 : 	getMonthName := 'August'; 
+		9 : 	getMonthName := 'September'; 
+		10 : 	getMonthName := 'October'; 
+		11 : 	getMonthName := 'November'; 
+		12 : 	getMonthName := 'December'; 
+		End; {case}	
 	END;
-}
 
+	FUNCTION numberDaysInMonth(monthParam : Integer; yearParam : Integer): Integer; 
+	BEGIN
+		{returns the number of days in a month, taking into acount leap years} 
+		Case monthParam of
+		1 : 	numberDaysInMonth := 31;
+		2 : 	Begin 
+			if (IsLeapYear(yearParam) = True) then 
+				numberDaysInmonth := 29
+			else
+				numberDaysInMonth := 28; 
+			End;
+		3 : 	numberDaysInMonth := 31; 
+		4 : 	numberDaysInMonth := 30; 
+		5 : 	numberDaysInMonth := 31; 
+		6 : 	numberDaysInMonth := 30; 
+		7 : 	numberDaysInMonth := 31; 
+		8 : 	numberDaysInMonth := 31;
+		9 : 	numberDaysInMonth := 30; 
+		10 : 	numberDaysInMonth := 31; 
+		11 : 	numberDaysInMonth := 30; 
+		12 : 	numberDaysInMonth := 31;
+		End; {case}
+	END; 
 
+	FUNCTION computeStartDay(monthParam : Integer; yearParam : Integer): Integer;
+	VAR currYear : Integer;
+	day : Integer;
+	currMonth : Integer; 
+	BEGIN
+	{returns the day of the week (by number) that the month starts on}	
+	{year 1600 January started on a saturday}
+	{S:0 M:1 T:2 W:3 R:4 F:5 S:6}
+
+	currMonth := 1;
+	currYear := 1600;	
+	day := 6; {1600 started on saturday} 
+
+	while (curryear < yearParam) do
+	begin
+		if (isLeapYear(currYear) = true) then
+			day := day + 366
+		else
+			day := day + 365;
+
+		day := day MOD 7;
+
+		currYear := currYear + 1;
+	end;
+
+	{we are in the right year, now add up the months}
+	while (currMonth < monthParam) do 
+	begin
+
+		day := day + numberDaysInMonth(currMonth,currYear);
+		currMonth := currMonth + 1;	
+	end; 
+		
+	computeStartDay := day MOD 7;
+
+	END;
 
 BEGIN
 	writeln('#######################################');
@@ -50,6 +120,9 @@ BEGIN
 		writeln(year,' is a leap year')
 	else
 		writeln(year,' is NOT a leap year');
+
+	writeln(numberDaysInMonth(month,year),' days in ', getMonthName(month));
+	writeln('month started on: ', computeStartDay(month,year));
 
 
 END. {end of program}
