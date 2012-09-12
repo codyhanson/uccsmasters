@@ -106,10 +106,45 @@ PROGRAM calendar;
 		Writeln('| S | M | T | W | R | F | S |');
 	end;
 
-	PROCEDURE writeRows (month : integer);
+	PROCEDURE writeRows (month : integer; year : integer);
 	Var startDay : Integer;
+		day : Integer;
+		posptr : Integer;
+		numDays : Integer;	
+		linestr : string;
+		strArray : Array[0..6] of String;
 	
 	begin
+
+		{clear junk from string array}
+		for posPtr := 0 to 6 do
+			strArray[posPtr] := '';
+
+		numDays := numberDaysInMonth(month,year);
+		startDay := computeStartDay(month,year);
+		posptr := startDay;
+		day := 1;
+		fmt := '|%0:3s|%1:3s|%2:3s|%3:3s|%4:3s|%5:3s|%6:3s|';
+		Repeat 
+			strArray[posptr] := IntToStr(day);
+			day := day + 1;
+			posPtr := (posPtr + 1) MOD 7;
+			if posPtr = 0 then begin	
+			linestr := Format(fmt,[strArray[0],strArray[1],strArray[2],strArray[3],strArray[4],strArray[5],strArray[6]]);
+			writeln(linestr); 
+			writeSeparator
+			end; 
+		Until (day > numDays);
+
+		{finish the row}
+		if posPtr > 0 then begin
+			for posPtr := posPtr to 6 do 
+			strArray[posPtr] := '';
+
+			linestr := Format(fmt,[strArray[0],strArray[1],strArray[2],strArray[3],strArray[4],strArray[5],strArray[6]]);
+			writeln(linestr); 
+		end;
+		writeSeparator;
 		
 	end;
 
@@ -142,6 +177,9 @@ BEGIN
 	S:= Format(fmt,[getMonthName(month),IntToStr(year)]);
 	writeln(S);         	
 	writeDays;
+	writeSeparator;
+	writeRows(month,year);
+
 
 	
 
