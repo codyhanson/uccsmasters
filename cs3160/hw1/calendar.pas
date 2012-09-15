@@ -5,8 +5,7 @@ PROGRAM calendar;
 
 	VAR month : Integer;
 	    year  : Integer;
-	    input : String;
-	    boolIsLeapYear : Boolean; 
+	    {for string formatting}
 	    fmt,S : string;
 
 	FUNCTION IsLeapYear(Year: Integer): BOOLEAN;
@@ -18,6 +17,7 @@ PROGRAM calendar;
 	END; {IsLeapYear}
 	
 	FUNCTION getMonthName(month:Integer) : string;
+	{returns the string name fot the month. Starting at index 1 to 12}
 	BEGIN
 		Case month of
 		1 : 	getMonthName := 'January';
@@ -33,11 +33,11 @@ PROGRAM calendar;
 		11 : 	getMonthName := 'November'; 
 		12 : 	getMonthName := 'December'; 
 		End; {case}	
-	END;
+	END;{getMonthName}
 
 	FUNCTION numberDaysInMonth(monthParam : Integer; yearParam : Integer): Integer; 
+	{returns the number of days in a month, taking into acount leap years} 
 	BEGIN
-		{returns the number of days in a month, taking into acount leap years} 
 		Case monthParam of
 		1 : 	numberDaysInMonth := 31;
 		2 : 	Begin 
@@ -57,7 +57,7 @@ PROGRAM calendar;
 		11 : 	numberDaysInMonth := 30; 
 		12 : 	numberDaysInMonth := 31;
 		End; {case}
-	END; 
+	END;{numberDaysInMonth}
 
 	FUNCTION computeStartDay(monthParam : Integer; yearParam : Integer): Integer;
 	VAR currYear : Integer;
@@ -66,35 +66,27 @@ PROGRAM calendar;
 	BEGIN
 	{returns the day of the week (by number) that the month starts on}	
 	{year 1600 January started on a saturday}
-	{S:0 M:1 T:2 W:3 R:4 F:5 S:6}
-
+	{S:0 M:1 T:2 W:3 R:4 F:5 S:6} 
 	currMonth := 1;
 	currYear := 1600;	
-	day := 6; {1600 started on saturday} 
-
+	day := 6; {year 1600 started on saturday} 
 	while (curryear < yearParam) do
 	begin
 		if (isLeapYear(currYear) = true) then
 			day := day + 366
 		else
-			day := day + 365;
-
-		day := day MOD 7;
-
+			day := day + 365; 
+		day := day MOD 7; 
 		currYear := currYear + 1;
-	end;
-
+	end;{while} 
 	{we are in the right year, now add up the months}
 	while (currMonth < monthParam) do 
-	begin
-
+	begin 
 		day := day + numberDaysInMonth(currMonth,currYear);
 		currMonth := currMonth + 1;	
 	end; 
-		
-	computeStartDay := day MOD 7;
-
-	END;
+	computeStartDay := day MOD 7; 
+	END; {computeStartDay}
 	
 	PROCEDURE writeSeparator;
 	begin
@@ -107,68 +99,60 @@ PROGRAM calendar;
 	end;
 
 	PROCEDURE writeRows (month : integer; year : integer);
+	{prints the rows of the month to the output}
 	Var startDay : Integer;
 		day : Integer;
 		posptr : Integer;
 		numDays : Integer;	
 		linestr : string;
-		strArray : Array[0..6] of String;
-	
-	begin
+		strArray : Array[0..6] of String; 
+	begin 
+	{clear junk from string array}
+	for posPtr := 0 to 6 do
+		strArray[posPtr] := '';
 
-		{clear junk from string array}
-		for posPtr := 0 to 6 do
-			strArray[posPtr] := '';
+	numDays := numberDaysInMonth(month,year);
+	startDay := computeStartDay(month,year);
+	posptr := startDay;
+	day := 1;
+	fmt := '|%0:3s|%1:3s|%2:3s|%3:3s|%4:3s|%5:3s|%6:3s|';
+	Repeat 
+		strArray[posptr] := IntToStr(day);
+		day := day + 1;
+		posPtr := (posPtr + 1) MOD 7;
+		if posPtr = 0 then begin	
+		linestr := Format(fmt,[strArray[0],strArray[1],strArray[2],strArray[3],strArray[4],strArray[5],strArray[6]]);
+		writeln(linestr); 
+		writeSeparator
+		end; 
+	Until (day > numDays);
 
-		numDays := numberDaysInMonth(month,year);
-		startDay := computeStartDay(month,year);
-		posptr := startDay;
-		day := 1;
-		fmt := '|%0:3s|%1:3s|%2:3s|%3:3s|%4:3s|%5:3s|%6:3s|';
-		Repeat 
-			strArray[posptr] := IntToStr(day);
-			day := day + 1;
-			posPtr := (posPtr + 1) MOD 7;
-			if posPtr = 0 then begin	
-			linestr := Format(fmt,[strArray[0],strArray[1],strArray[2],strArray[3],strArray[4],strArray[5],strArray[6]]);
-			writeln(linestr); 
-			writeSeparator
-			end; 
-		Until (day > numDays);
+	{finish the row}
+	if posPtr > 0 then begin
+		for posPtr := posPtr to 6 do 
+		strArray[posPtr] := '';
 
-		{finish the row}
-		if posPtr > 0 then begin
-			for posPtr := posPtr to 6 do 
-			strArray[posPtr] := '';
-
-			linestr := Format(fmt,[strArray[0],strArray[1],strArray[2],strArray[3],strArray[4],strArray[5],strArray[6]]);
-			writeln(linestr); 
-		end;
-		writeSeparator;
-		
-	end;
+		linestr := Format(fmt,[strArray[0],strArray[1],strArray[2],strArray[3],strArray[4],strArray[5],strArray[6]]);
+		writeln(linestr); 
+	end;{if}
+	writeSeparator; 
+	end;{writeRows}
 
 
 
 
 BEGIN
-	writeln('#######################################');
-	writeln('calendar starting');
-
 	year := 0;
-	month := 0;
-
+	month := 0; 
 	{get user input for month and year, repeat until they get it right}
 	REPEAT 
 		write('Enter a year (1600-2400):');
 		Readln(year);
-		writeln(year)	
 	Until (year >=  1600) AND (year <= 2400);
 
 	REPEAT 
 		write('Enter a month (1-12):');
 		Readln(month);
-		writeln(month)	
 	Until (month >=  1) AND (month <= 12);
 
 	{input is now good.}
@@ -178,9 +162,5 @@ BEGIN
 	writeln(S);         	
 	writeDays;
 	writeSeparator;
-	writeRows(month,year);
-
-
-	
-
+	writeRows(month,year); 
 END. {end of program}
