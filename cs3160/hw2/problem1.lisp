@@ -1,27 +1,22 @@
 ;HW2 Problem 1
 
-(defun deeplen (x)
+(defun len (x)
 	(cond
 	((null x) 0)
 	((atom x) 1)
-	(t (+ (len (car x)) (deeplen (cdr x))))))
+	(t (+ 1 (len (cdr x))))))
 
+(setf l1 (list 'a 'b 'c 'd))
+(print l1)
+(print (len l1))
 
-(format -t "~a" "here is the string with no quotes")
+(setf l2 (list (list 'a 'b) (list (list'c 'd (list 'x (list 'y 'z))) 'e) 'f 'g))
+(print l2)
+(print (len l2))
 
-(princ "starting testing for problem 1\n")
-(princ "test 1\n")
-(setf listone (list 1 2 3 4))
-(princ "first input: l1. 4 atoms, should get deeplen = 4\n")
-(princ "listone = ")
-(print listone)
-(princ "deeplen got:")
-(print (deeplen listone))
+(setf l3 'a)
+(print l3)
+(print (len l3))
 
-(princ "test 2")
-(setf listtwo (list (list 'a 'b) (list (list 'c 'd (list 'x (list 'y 'z))) 'f 'g))
-(princ "first input: embedded lsits, should get deeplen = 10")
-(princ "listtwo = ")
-(print listtwo)
-(princ "deeplen got:")
-(print (deeplen listtwo))
+(print (list))
+(print (len (list)))
