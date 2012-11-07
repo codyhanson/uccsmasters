@@ -6,18 +6,20 @@
 
 
 (defun contains (x y)
-  (if (null x) 
-    y
-    (if (not(atomsonly x)) 
-      nil
-      (if (equal (car y) (car x))
-        (contains (cdr x) (cdr y))
-        (contains x (cdr y))
+  (print x)
+  (print y)
+  (read)
+  (cond 
+  ((null y) nil)
+  ((not (listp y)) nil)
+  ((null x) y)
+  ((not(atomsonly x)) nil)
+  ((equal (car y) (car x))(contains (cdr x) (cdr y)))
+  (T (contains x (cdr y)))))
 
 ;returns true if x is composed of only atoms
 ;returns nil if there is a nested list
 (defun atomsonly (x)
-  (print x)
   (if (null x) 
     t 
     (if (atom (car x))
@@ -33,8 +35,7 @@
 ;now get X and compute if X is in Y
 (format t "Please Input X:")
 (loop while (setq x (read)) do
-  ;(contains x y) 
-  (print (atomsonly x))
+  (print (contains x y)) 
   (format t "Please Input X:")
   (terpri))
 
