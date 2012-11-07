@@ -6,11 +6,13 @@
 
 
 (defun contains (x y)
-  (cond
-  ((equal (car x) (car y)) (contains (cdr x) (cdr y)))
-  (format t x)
-  (format t y)))
-
+  (if (null x) 
+    y
+    (if (not(atomsonly x)) 
+      nil
+      (if (equal (car y) (car x))
+        (contains (cdr x) (cdr y))
+        (contains x (cdr y))
 
 ;returns true if x is composed of only atoms
 ;returns nil if there is a nested list
