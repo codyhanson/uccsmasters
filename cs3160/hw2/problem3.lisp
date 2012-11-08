@@ -6,12 +6,10 @@
 
 
 (defun contains (x y)
-  (print x)
-  (print y)
-  (read)
   (cond 
   ((null y) nil)
   ((not (listp y)) nil)
+  ((not (listp x)) nil)
   ((null x) y)
   ((not(atomsonly x)) nil)
   ((equal (car y) (car x))(contains (cdr x) (cdr y)))
@@ -21,13 +19,10 @@
 ;returns nil if there is a nested list
 (defun atomsonly (x)
   (if (null x) 
-    t 
+    T 
     (if (atom (car x))
       (atomsonly (cdr x))
       nil)))
-
-
-
 
 ;'main' loop to take in input for x and y
 (format t "Please Input Y:")
@@ -36,6 +31,6 @@
 (format t "Please Input X:")
 (loop while (setq x (read)) do
   (print (contains x y)) 
-  (format t "Please Input X:")
-  (terpri))
+  (terpri)
+  (format t "Please Input X:"))
 
