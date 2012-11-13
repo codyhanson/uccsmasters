@@ -4,4 +4,4 @@
 (load "problem1.lisp")
 (load "problem2.lisp")
 (load "problem3.lisp")
-;(load "problem4.lisp")
+(load "problem4.lisp")
