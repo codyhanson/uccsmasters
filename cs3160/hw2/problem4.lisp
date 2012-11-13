@@ -37,8 +37,7 @@
       (setf newlist (append newlist (list (list indx (car (cdr (car mylist))))))))
     (setf mylist (cdr mylist))
     (setf indx (+ indx 1))
-  (when (null mylist) (return)))
-  (return newlist))
+  (when (null mylist) (return newlist))))
 
 (defun swap (mylist x y)
   (setf xval (getval mylist x))
@@ -54,10 +53,10 @@
   (loop
     (if (= indx (car (car mylist))) ;if the next item in the list is our index
       (progn
-       (format t "~d ~a ~%" indx (cdr (car mylist)))
+       (format t "~d: ~a ~%" indx (car (cdr (car mylist))))
         (setf mylist (cdr mylist)))
       (if (not (null all)) ;else
-        (format t "~d NIL ~%" indx))) 
+        (format t "~d: NIL ~%" indx))) 
     (setf indx (+ indx 1))
   (when (> indx size) (return))))
 
@@ -94,8 +93,8 @@
 (display x T)
 
 
-;(display (compress x) nil)
-(compress x)
+(print (compress x))
+(display (compress x) T)
 
 ;(defun bubblesort (mylist)
 
