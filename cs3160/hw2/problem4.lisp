@@ -28,10 +28,17 @@
   (T (size (cdr mylist)))))
 
 
-;(defun compress (mylist)
-;  (cond 
-;  ((null mylist) nil)
-;  (T (cons (list (1) (cdr (car mylist))) (compress (cdr mylist))))))
+(defun compress (mylist)
+  (setf indx 1)
+  (setf newlist (list))
+  (loop
+    (if (null newlist)
+      (setf newlist (list (list indx (car (cdr (car mylist))))))
+      (setf newlist (append newlist (list (list indx (car (cdr (car mylist))))))))
+    (setf mylist (cdr mylist))
+    (setf indx (+ indx 1))
+  (when (null mylist) (return)))
+  (return newlist))
 
 (defun swap (mylist x y)
   (setf xval (getval mylist x))
@@ -87,6 +94,8 @@
 (display x T)
 
 
+;(display (compress x) nil)
+(compress x)
 
 ;(defun bubblesort (mylist)
 
