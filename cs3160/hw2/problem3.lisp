@@ -26,6 +26,7 @@
       nil)))
 
 ;'main' loop to take in input for x and y
+;commented so that I can run the automated tests.
 ;(format t "Please Input Y:")
 ;(setq y (read))
 ;now get X and compute if X is in Y

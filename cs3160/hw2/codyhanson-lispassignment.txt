@@ -1,0 +1,136 @@
+Program Output - Cody Hanson
+
+;; Dribble of #<IO TERMINAL-STREAM> started on NIL.
+Problem 1
+Test 1:
+(A B C D) 
+4 
+Test 2:
+((A B) ((C D (X (Y Z))) E) F G) 
+4 
+Test 3:
+A 
+1 
+Test 4:
+NIL 
+0 
+
+Problem 2
+Test 1: Topreverse, then Deepreverse.
+(D C B A) 
+(D C B A) 
+Test 2: Topreverse, then Deepreverse.
+(G F ((C D (X (Y Z))) E) (A B)) 
+(G F (E (((Z Y) X) D C)) (B A)) 
+Test 3: Topreverse, then Deepreverse.
+A 
+A 
+Test 4: Topreverse, then Deepreverse.
+NIL 
+NIL 
+ 
+Problem 3 Tests: Part 1 
+Y is:
+((1) A B C (2) D E) 
+X is: ( A ) 
+Test Result 1-1: ( B, C, (2), D, E ) 
+
+X is: ( B, C ) 
+Test Result 1-2: ( (2), D, E ) 
+
+X is: ( A, B, C ) 
+Test Result 1-3: ( (2), D, E ) 
+
+X is: ( B, C, D ) 
+Test Result 1-4: ( E ) 
+
+X is:X is: ( B, C, D ) 
+Test Result 1-5: ( E ) 
+
+X is: ( D ) 
+Test Result 1-6: ( E ) 
+
+X is: ( E ) 
+Test Result 1-7: (  ) 
+
+X is: ( A, B, (C) ) 
+Test Result 1-8: (  ) 
+
+X is:  A 
+Test Result 1-9: (  ) 
+
+X is: (NIL) 
+Test Result 1-10:
+((1) A B C (2) D E) 
+ 
+Problem 3 Tests: Part 2 
+Y is:
+(A B C D (1) E F (2) G) 
+
+X is: ( A ) 
+Test Result 2-1: ( B, C, D, (1), E, F, (2), G ) 
+
+X is: ( D ) 
+Test Result 2-2: ( (1), E, F, (2), G ) 
+
+X is: ( E, F ) 
+Test Result 2-3: ( (2), G ) 
+
+X is: ( E, F, G ) 
+Test Result 2-4: (  ) 
+
+X is: ( B, C ) 
+Test Result 2-5: ( D, (1), E, F, (2), G ) 
+
+
+
+Problem 4 Testing:
+setval: adding (10,8)
+((10 8)) 
+setval: adding (5,6)
+((5 6) (10 8)) 
+setval: adding (1,4)
+((1 4) (5 6) (10 8)) 
+setval: adding (2,10)
+((1 4) (2 10) (5 6) (10 8)) 
+setval: adding (7,25)
+((1 4) (2 10) (5 6) (7 25) (10 8)) 
+setval: adding (8,NIL)
+((1 4) (2 10) (5 6) (7 25) (10 8)) 
+Getval 1,3,5:
+4 
+NIL 
+6 
+Size of X:
+10 
+swap 1, 5:
+((1 6) (2 10) (5 4) (7 25) (10 8)) 
+swap 7, 10:
+((1 6) (2 10) (5 4) (7 8) (10 25)) 
+swap 6, 8:
+((1 6) (2 10) (5 4) (7 8) (10 25)) 
+
+Display All=nil and All=T:
+1: 6 
+2: 10 
+5: 4 
+7: 8 
+10: 25 
+
+1: 6 
+2: 10 
+3: NIL 
+4: NIL 
+5: 4 
+6: NIL 
+7: 8 
+8: NIL 
+9: NIL 
+10: 25 
+
+
+compress:
+((1 4) (2 10) (3 6) (4 25) (5 8)) 
+
+Bubble sort: 
+((1 4) (2 6) (3 8) (4 10) (5 25)) 

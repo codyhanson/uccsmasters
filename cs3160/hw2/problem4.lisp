@@ -70,6 +70,9 @@
     (setf indx (+ indx 1))
   (when (> indx size) (return))))
 
+;begin testing
+
+(format t "~%~%Problem 4 Testing:")
 (format t "~%setval: adding (10,8)")
 (setf x (setval nil 10 8))
 (print x)
@@ -97,6 +100,8 @@
 (format t "~%Size of X:")
 (print (size x))
 
+(setf originalx x)
+
 (format t "~%swap 1, 5:")
 (setf x (swap x 1 5))
 (print x)
@@ -114,7 +119,7 @@
 
 
 (format t "~%~%compress:")
-(print (compress x))
+(print (compress originalx))
 
 (format t "~%~%Bubble sort: ")
-(print (bubblesort x))
+(print (bubblesort originalx))
