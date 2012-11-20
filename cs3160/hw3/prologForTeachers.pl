@@ -1,0 +1,2 @@
+
+likes(joe,bob).
