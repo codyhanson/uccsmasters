@@ -4,8 +4,7 @@ instructor(richards).
 instructor(kimball).
 instructor(crane).
 instructor(nichols).
-instructor(burke).
-
+instructor(burke).  
 lecturer(smith).
 lecturer(jones).
 lecturer(doe).
@@ -14,21 +13,19 @@ lecturer(beeker).
 lecturer(zola).
 lecturer(jenner).
 
-math(smith).
-math(jones).
-math(doe).
-math(kimball).
-math(crane).
-
-cs(zola).
-cs(jenner).
-cs(nichols).
-cs(burke).
-
-english(andrews).
-english(beeker).
-english(lovell).
-english(richards).
+degree(smith,math).
+degree(jones,math).
+degree(doe,math).
+degree(kimball,math).
+degree(crane,math).
+degree(zola,cs).
+degree(jenner,cs).
+degree(nichols,cs).
+degree(burke,cs).
+degree(andrews,eng).
+degree(beeker,eng).
+degree(lovell,eng).
+degree(richards,eng).
 
 %declare which classes exist, subject and number
 class(math,101).
@@ -37,14 +34,12 @@ class(math,201).
 class(math,301).
 class(math,350).
 class(math,400).
-class(math,415).
-
-class(english,100).
-class(english,110).
-class(english,150).
-class(english,220).
-class(english,300).
-
+class(math,415).  
+class(eng,100).
+class(eng,110).
+class(eng,150).
+class(eng,220).
+class(eng,300).  
 class(cs,110).
 class(cs,145).
 class(cs,200).
@@ -59,11 +54,26 @@ csinstructor(X) :-
 	cs(X),
 	instructor(X).
 
+inform(X,Y,Z) :-
+	write([teacher,X,can,teach,course,Y,Z]),nl.
+
 canteach(Teacher,Subject,Number) :-
 	lecturer(Teacher),
-	lowlevel(Number); 
-	instructor(Teacher).
+	lowlevel(Number),
+	class(Subject,Number),
+	degree(Teacher,Subject); 
+	instructor(Teacher),
+	class(Subject,Number),
+	degree(Teacher,Subject). 
 
 
 %whocanteach(Subject,Nummber) :-
 	
+
+
+%run the queries
+%1) What classes can be taught by jenner?
+%A:
+
+
+
