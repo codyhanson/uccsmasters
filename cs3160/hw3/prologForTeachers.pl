@@ -59,21 +59,61 @@ inform(X,Y,Z) :-
 
 canteach(Teacher,Subject,Number) :-
 	lecturer(Teacher),
-	lowlevel(Number),
 	class(Subject,Number),
-	degree(Teacher,Subject); 
+	lowlevel(Number),
+	degree(Teacher,Subject),
+	inform(Teacher,Subject,Number); 
 	instructor(Teacher),
 	class(Subject,Number),
-	degree(Teacher,Subject). 
+	degree(Teacher,Subject),
+	inform(Teacher,Subject,Number). 
 
+%canteach(Teacher) :-
+%	lecturer(Teacher),
+%	lowlevel(class(degree(Teacher,Subject),Number));
+%	instructor(Teacher),
+%	class(degree(Teacher,Subject),Number).
+%	
 
-%whocanteach(Subject,Nummber) :-
-	
-
-
+go :-
 %run the queries
 %1) What classes can be taught by jenner?
-%A:
+canteach(jenner,Subject,Number);
+
+
+%2) What classes can be taught by Burke?
+canteach(Burke,Subject,Number);
+
+%3) What classes can be taught by Andrews?
+canteach(andrews,Subject,Number);
+
+%4) What classes can be taught by richards?
+canteach(richards,Subject,Number);
+
+%5) What classes can be taught by Crane?
+canteach(crane,Subject,Number); 
+
+%6) who can teach cs 300?
+canteach(Who,cs,300);
+
+%7) who can teach any level cs course?
+%interpreting as, can teach any cs course unrestrictedly.
+canteach(Who,cs,Number), instructor(Who);
+
+%8) who are all the teachers who could teach 100-level courses in any area
+% should be none....
+
+
+%9) who can teach math 415?
+canteach(Who,math,415);
+
+%10) who are all the teachers that can teach english courses
+degree(Who,eng).
+
+
+
+
+
 
 
 
