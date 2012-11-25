@@ -34,18 +34,24 @@ halfstep(gs,a).
 
 %intervals
 thirdinterval(FirstNote,SecondNote) :-
+	note(FirstNote),
+	note(SecondNote),
 	halfstep(FirstNote,A),
 	halfstep(A,B),
 	halfstep(B,C),
 	halfstep(C,SecondNote).
 
 minorthirdinterval(FirstNote,SecondNote) :-
+	note(FirstNote),
+	note(SecondNote),
 	halfstep(FirstNote,A),
 	halfstep(A,B),
 	halfstep(B,SecondNote).
 
 
 fifthinterval(FirstNote,SecondNote) :-
+	note(FirstNote),
+	note(SecondNote),
 	halfstep(FirstNote,A),
 	halfstep(A,B),
 	halfstep(B,C),
@@ -55,6 +61,8 @@ fifthinterval(FirstNote,SecondNote) :-
 	halfstep(F,SecondNote).
 
 flattedfithinterval(FirstNote,SecondNote) :-
+	note(FirstNote),
+	note(SecondNote),
 	halfstep(FirstNote,A),
 	halfstep(A,B),
 	halfstep(B,C),
@@ -63,6 +71,8 @@ flattedfithinterval(FirstNote,SecondNote) :-
 	halfstep(E,SecondNote).
 
 majorseventhinterval(FirstNote,SecondNote) :-
+	note(FirstNote),
+	note(SecondNote),
 	halfstep(FirstNote,A),
 	halfstep(A,B),
 	halfstep(B,C),
@@ -74,7 +84,9 @@ majorseventhinterval(FirstNote,SecondNote) :-
 	halfstep(H,I),
 	halfstep(I,SecondNote).
 
-dominantseventh(FirstNote,SecondNote) :-
+dominantseventhinterval(FirstNote,SecondNote) :-
+	note(FirstNote),
+	note(SecondNote),
 	halfstep(FirstNote,A),
 	halfstep(A,B),
 	halfstep(B,C),
@@ -85,17 +97,59 @@ dominantseventh(FirstNote,SecondNote) :-
 	halfstep(G,H),
 	halfstep(H,SecondNote).
 
+inform(TypeOfCord,Root,Second,Third,Fourth) :-
+	write([TypeOfCord,chord,for,root,Root,is,Root,Second,Third,Fourth]),nl.
 
-%%chords 
-%majorchord(Root) :-
-%
-%
-%minorchord(Root) :-
-%
-%
-%majorseventhchord(Root) :-
-%
-%
-%dominantseventhchord(Root) :-
-%
+inform(TypeOfCord,Root,Second,Third) :-
+	write([TypeOfCord,chord,for,root,Root,is,Root,Second,Third]),nl.
+
+%chords 
+majorchord(Root) :-
+	thirdinterval(Root,ThirdNote),
+	fifthinterval(Root,FifthNote),
+	inform(major,Root,ThirdNote,FifthNote).
+
+
+minorchord(Root) :-
+	minorthirdinterval(Root,ThirdNote),
+	fifthinterval(Root,FifthNote),
+	inform(minor,Root,ThirdNote,FifthNote).
+
+
+majorseventhchord(Root) :-
+	thirdinterval(Root,ThirdNote),
+	fifthinterval(Root,FifthNote),
+	majorseventhinterval(Root,Seventh),
+	inform(majorseventh,Root,ThirdNote,FifthNote,Seventh).
+
+dominantseventhchord(Root) :-
+	minorthirdinterval(Root,ThirdNote),
+	fifthinterval(Root,FifthNote),
+	dominantseventhinterval(Root,Seventh),
+	inform(dominantseventh,Root,ThirdNote,FifthNote,Seventh).
+
+%main entry point for running of queries
+
+go :-
+
+majorchord(c),
+
+majorchord(g),
+
+majorchord(cs),
+
+majorseventhchord(c),
+
+majorseventhchord(a),
+
+minorchord(d),
+
+minorchord(e),
+
+dominantseventhchord(f),
+
+dominantseventhchord(b),
+
+dominantseventhchord(gs).
+%end of go
 
