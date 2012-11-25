@@ -110,6 +110,7 @@ canteach(Who,math,415);
 %10) who are all the teachers that can teach english courses
 degree(Who,eng).
 
+%end of the go routine.
 
 
 
