@@ -3,6 +3,7 @@
 
 %facts
 %The notation of an 's' after a note will denote a '#'.
+
 note(a).
 note(as).
 note(b).
@@ -132,24 +133,49 @@ dominantseventhchord(Root) :-
 
 go :-
 
+tell('prologForMusciansOutput.txt'),
+
+write('Prolog For Muscicians test cases:'),nl,
+
+write('1) Major chord rooted at C'),nl,
 majorchord(c),
+nl,
 
+write('2) Major chord rooted at G'),nl,
 majorchord(g),
+nl,
 
+write('3) Major chord rooted at C#'),nl,
 majorchord(cs),
+nl,
 
+write('4) Major Seventh chord rooted at C'),nl,
 majorseventhchord(c),
+nl,
 
+write('5) Major Seventh chord rooted at A'),nl,
 majorseventhchord(a),
+nl,
 
+write('6) Minor chord rooted at D'),nl,
 minorchord(d),
+nl,
 
+write('7) Minor chord rooted at E'),nl,
 minorchord(e),
+nl,
 
+write('8) Dominant Seventh chord rooted at F'),nl,
 dominantseventhchord(f),
+nl,
 
+write('9) Dominant Seventh chord rooted at B'),nl,
 dominantseventhchord(b),
+nl,
 
-dominantseventhchord(gs).
+write('10) Dominant Seventh chord rooted at G#'),nl,
+dominantseventhchord(gs),
+nl,
+told.
 %end of go
 

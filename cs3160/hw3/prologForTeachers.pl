@@ -1,4 +1,7 @@
+%Cody Hanson
+%CS3160 Prolog Assignment 3, Problem 1.
 
+%Facts
 instructor(lovell).
 instructor(richards).
 instructor(kimball).
@@ -76,39 +79,54 @@ canteach(Teacher,Subject,Number) :-
 %	
 
 go :-
+
+%tell('prologForTeachersOutput.txt'),
+
+
 %run the queries
-%1) What classes can be taught by jenner?
-canteach(jenner,Subject,Number);
 
+write('1) What classes can be taught by jenner?'),nl,
+canteach(jenner,Subject1,Number1),
+nl,
 
-%2) What classes can be taught by Burke?
-canteach(Burke,Subject,Number);
+write('2) What classes can be taught by Burke?'),nl,
+canteach(burke,Subject,Number),
+nl,
 
-%3) What classes can be taught by Andrews?
-canteach(andrews,Subject,Number);
+write('3) What classes can be taught by Andrews?'),nl,
+canteach(andrews,Subject,Number),
+nl,
 
-%4) What classes can be taught by richards?
-canteach(richards,Subject,Number);
+write('4) What classes can be taught by richards?'),nl,
+canteach(richards,Subject,Number),
+nl,
 
-%5) What classes can be taught by Crane?
-canteach(crane,Subject,Number); 
+write('5) What classes can be taught by Crane?'),nl,
+canteach(crane,Subject,Number),
+nl,
 
-%6) who can teach cs 300?
-canteach(Who,cs,300);
+write('6) who can teach cs 300?'),nl,
+canteach(Who,cs,300),
+nl,
 
-%7) who can teach any level cs course?
+write('7) who can teach any level cs course?'),nl,
 %interpreting as, can teach any cs course unrestrictedly.
-canteach(Who,cs,Number), instructor(Who);
+canteach(Who,cs,Number), instructor(Who),
+nl,
 
 %8) who are all the teachers who could teach 100-level courses in any area
 % should be none....
 
 
-%9) who can teach math 415?
-canteach(Who,math,415);
+write('9) who can teach math 415?'),nl,
+canteach(Who,math,415),
+nl,
 
-%10) who are all the teachers that can teach english courses
-degree(Who,eng).
+write('10) who are all the teachers that can teach english courses'),nl,
+degree(Who,eng),
+nl.
+
+%told.
 
 %end of the go routine.
 
