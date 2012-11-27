@@ -71,6 +71,8 @@ flattedfithinterval(FirstNote,SecondNote) :-
 	halfstep(D,E),
 	halfstep(E,SecondNote).
 
+
+%need 11
 majorseventhinterval(FirstNote,SecondNote) :-
 	note(FirstNote),
 	note(SecondNote),
@@ -83,8 +85,10 @@ majorseventhinterval(FirstNote,SecondNote) :-
 	halfstep(F,G),
 	halfstep(G,H),
 	halfstep(H,I),
-	halfstep(I,SecondNote).
+	halfstep(I,J),
+	halfstep(J,SecondNote).
 
+%need 10 steps
 dominantseventhinterval(FirstNote,SecondNote) :-
 	note(FirstNote),
 	note(SecondNote),
@@ -96,7 +100,8 @@ dominantseventhinterval(FirstNote,SecondNote) :-
 	halfstep(E,F),
 	halfstep(F,G),
 	halfstep(G,H),
-	halfstep(H,SecondNote).
+	halfstep(H,I),
+	halfstep(I,SecondNote).
 
 inform(TypeOfCord,Root,Second,Third,Fourth) :-
 	write([TypeOfCord,chord,for,root,Root,is,Root,Second,Third,Fourth]),nl.
