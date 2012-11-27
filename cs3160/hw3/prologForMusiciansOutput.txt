@@ -1,0 +1,31 @@
+Prolog For Muscicians test cases:
+1) Major chord rooted at C
+[major,chord,for,root,c,is,c,e,g]
+
+2) Major chord rooted at G
+[major,chord,for,root,g,is,g,b,d]
+
+3) Major chord rooted at C#
+[major,chord,for,root,cs,is,cs,f,gs]
+
+4) Major Seventh chord rooted at C
+[majorseventh,chord,for,root,c,is,c,e,g,as]
+
+5) Major Seventh chord rooted at A
+[majorseventh,chord,for,root,a,is,a,cs,e,g]
+
+6) Minor chord rooted at D
+[minor,chord,for,root,d,is,d,f,a]
+
+7) Minor chord rooted at E
+[minor,chord,for,root,e,is,e,g,b]
+
+8) Dominant Seventh chord rooted at F
+[dominantseventh,chord,for,root,f,is,f,gs,c,d]
+
+9) Dominant Seventh chord rooted at B
+[dominantseventh,chord,for,root,b,is,b,d,fs,gs]
+
+10) Dominant Seventh chord rooted at G#
+[dominantseventh,chord,for,root,gs,is,gs,b,ds,f]
+

@@ -133,7 +133,7 @@ dominantseventhchord(Root) :-
 
 go :-
 
-tell('prologForMusciansOutput.txt'),
+tell('prologForMusiciansOutput.txt'),
 
 write('Prolog For Muscicians test cases:'),nl,
 

@@ -114,9 +114,9 @@ write('7) who can teach any level cs course?'),nl,
 canteach(Who,cs,Number), instructor(Who),
 nl,
 
-%8) who are all the teachers who could teach 100-level courses in any area
+8) who are all the teachers who could teach 100-level courses in any area
 % should be none....
-
+degree(Who,eng), degree(Who,math), degree(Who,cs).
 
 write('9) who can teach math 415?'),nl,
 canteach(Who,math,415),
@@ -129,10 +129,6 @@ nl.
 %told.
 
 %end of the go routine.
-
-
-
-
 
 
 
