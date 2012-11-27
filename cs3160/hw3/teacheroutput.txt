@@ -1,0 +1,84 @@
+1) What classes can be taught by jenner?
+[teacher,jenner,with,degree,in,cs,can,teach,course,cs,110]
+[teacher,jenner,with,degree,in,cs,can,teach,course,cs,145]
+[teacher,jenner,with,degree,in,cs,can,teach,course,cs,200]
+
+2) What classes can be taught by Burke?
+[teacher,burke,with,degree,in,cs,can,teach,course,cs,110]
+[teacher,burke,with,degree,in,cs,can,teach,course,cs,145]
+[teacher,burke,with,degree,in,cs,can,teach,course,cs,200]
+[teacher,burke,with,degree,in,cs,can,teach,course,cs,300]
+[teacher,burke,with,degree,in,cs,can,teach,course,cs,410]
+[teacher,burke,with,degree,in,cs,can,teach,course,cs,450]
+
+3) What classes can be taught by Andrews?
+[teacher,andrews,with,degree,in,eng,can,teach,course,eng,100]
+[teacher,andrews,with,degree,in,eng,can,teach,course,eng,110]
+[teacher,andrews,with,degree,in,eng,can,teach,course,eng,150]
+[teacher,andrews,with,degree,in,eng,can,teach,course,eng,220]
+
+4) What classes can be taught by richards?
+[teacher,richards,with,degree,in,eng,can,teach,course,eng,100]
+[teacher,richards,with,degree,in,eng,can,teach,course,eng,110]
+[teacher,richards,with,degree,in,eng,can,teach,course,eng,150]
+[teacher,richards,with,degree,in,eng,can,teach,course,eng,220]
+[teacher,richards,with,degree,in,eng,can,teach,course,eng,300]
+
+5) What classes can be taught by Crane?
+[teacher,crane,with,degree,in,math,can,teach,course,math,101]
+[teacher,crane,with,degree,in,math,can,teach,course,math,102]
+[teacher,crane,with,degree,in,math,can,teach,course,math,201]
+[teacher,crane,with,degree,in,math,can,teach,course,math,301]
+[teacher,crane,with,degree,in,math,can,teach,course,math,350]
+[teacher,crane,with,degree,in,math,can,teach,course,math,400]
+[teacher,crane,with,degree,in,math,can,teach,course,math,415]
+
+6) who can teach cs 300?
+[teacher,nichols,with,degree,in,cs,can,teach,course,cs,300]
+[teacher,burke,with,degree,in,cs,can,teach,course,cs,300]
+
+7) who can teach any level cs course?
+[teacher,zola,with,degree,in,cs,can,teach,course,cs,110]
+[teacher,zola,with,degree,in,cs,can,teach,course,cs,145]
+[teacher,zola,with,degree,in,cs,can,teach,course,cs,200]
+[teacher,jenner,with,degree,in,cs,can,teach,course,cs,110]
+[teacher,jenner,with,degree,in,cs,can,teach,course,cs,145]
+[teacher,jenner,with,degree,in,cs,can,teach,course,cs,200]
+[teacher,nichols,with,degree,in,cs,can,teach,course,cs,110]
+[teacher,nichols,with,degree,in,cs,can,teach,course,cs,145]
+[teacher,nichols,with,degree,in,cs,can,teach,course,cs,200]
+[teacher,nichols,with,degree,in,cs,can,teach,course,cs,300]
+[teacher,nichols,with,degree,in,cs,can,teach,course,cs,410]
+[teacher,nichols,with,degree,in,cs,can,teach,course,cs,450]
+[teacher,burke,with,degree,in,cs,can,teach,course,cs,110]
+[teacher,burke,with,degree,in,cs,can,teach,course,cs,145]
+[teacher,burke,with,degree,in,cs,can,teach,course,cs,200]
+[teacher,burke,with,degree,in,cs,can,teach,course,cs,300]
+[teacher,burke,with,degree,in,cs,can,teach,course,cs,410]
+[teacher,burke,with,degree,in,cs,can,teach,course,cs,450]
+
+8) who are all the teachers who could teach 100-level courses in any area
+[smith,is,a,lecturer,who,can,teach,lvl,100,math]
+[jones,is,a,lecturer,who,can,teach,lvl,100,math]
+[doe,is,a,lecturer,who,can,teach,lvl,100,math]
+[andrews,is,a,lecturer,who,can,teach,lvl,100,eng]
+[beeker,is,a,lecturer,who,can,teach,lvl,100,eng]
+[zola,is,a,lecturer,who,can,teach,lvl,100,cs]
+[jenner,is,a,lecturer,who,can,teach,lvl,100,cs]
+[lovell,is,an,instructor,who,can,teach,lvl,100,eng]
+[richards,is,an,instructor,who,can,teach,lvl,100,eng]
+[kimball,is,an,instructor,who,can,teach,lvl,100,math]
+[crane,is,an,instructor,who,can,teach,lvl,100,math]
+[nichols,is,an,instructor,who,can,teach,lvl,100,cs]
+[burke,is,an,instructor,who,can,teach,lvl,100,cs]
+
+9) who can teach math 415?
+[teacher,kimball,with,degree,in,math,can,teach,course,math,415]
+[teacher,crane,with,degree,in,math,can,teach,course,math,415]
+
+ 10) who are all the teachers that can teach english courses
+degree(Who,eng).
+Who = andrews ;
+Who = beeker ;
+Who = lovell ;
+Who = richards.
