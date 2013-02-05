@@ -1,4 +1,4 @@
-uccsalgorithms
+uccsmasters
 ==============
 
-for my Masters class CS5270
+for my Masters class's, homework and small projects 
