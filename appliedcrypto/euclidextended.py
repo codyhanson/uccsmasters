@@ -12,7 +12,7 @@ def euclid(a, b,xminus1,xminus2,yminus1,yminus2):
         q = a/b
         x = xminus2 - q*xminus1
         y = yminus2 - q*yminus1
-        #print (b, a % b,x,xminus1,y,yminus1)
+        print (b, a % b,q,x,y)
         return euclid(b, a % b,x,xminus1,y,yminus1)
 
 #main
@@ -28,4 +28,7 @@ yminus1 = 1
 xminus2 = 1
 yminus2 = 0
 
-print "(d,x,y) = ", euclid(a,b,xminus1,xminus2,yminus1,yminus2)
+print "(b, a%b, q, x, y)"
+(d,x,y) =  euclid(a,b,xminus1,xminus2,yminus1,yminus2)
+
+print "(d,x,y) = ", (d,x,y)
