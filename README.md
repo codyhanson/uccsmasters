@@ -1,4 +1,4 @@
 uccsmasters
 ==============
 
-for my Masters class's, homework and small projects 
+For my Masters course work at UC Colorado Springs
