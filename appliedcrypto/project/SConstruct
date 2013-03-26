@@ -1,0 +1,4 @@
+import os
+env = Environment(ENV=os.environ)
+pdfOutput = env.PDF(target='Hanson_proposal.tex')
+Depends(pdfOutput,Split('Hanson_proposal.tex introduction.tex citations.bib'))

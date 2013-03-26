@@ -1,0 +1,16 @@
+# COMPILE
+
+## Prerequisites 
+
+1. Latex with IEEE transaction class installed (e.g. texlive). Tex binaries must be present in your path.
+2. scons Python build tool. Scons should be present in your path.
+
+
+## Compiling
+1. Open a terminal and navigate to this directory.
+2. Type 'scons'
+
+## Cleaning
+1. Open a terminal and navigate to this directory.
+2. Type 'scons -c'
+
