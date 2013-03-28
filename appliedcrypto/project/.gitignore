@@ -1,5 +1,9 @@
+#LaTeX output
 *.log
 *.aux
 *.pdf
 *.gz
 *.dvi
+
+#for scons
+*.dblite
