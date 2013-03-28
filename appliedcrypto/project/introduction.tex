@@ -1,15 +1,25 @@
 \section{Introduction}
-introduction goes here
+As more data and processing moves to the cloud, security minded usersmust take steps to ensure data integrity and confidentiality.
+The most prevalent way to accomplish this is to use encryption. 
+By encrypting data, users can be sure that cloud operators do not
+obtain unauthorized access to the data, as well as ensure that data is not modified or tampered with while residing in third party data centers.
 
-example of a citation \cite{epfl-mobility-2009-02-24}
+Some datacenter storage services such as Amazon S3 \cite{Amazon-S3} provide server-side encryption for user data. This technique is inferior to client side encryption because the integrity of the encryption cannot be guaranteed.
+Their encryption also only protects the data while it is sitting on the disk, and not anywhere else along the flow from server to client.
+With client-side encryption performed before the data is sent to the cloud, users can be guaranteed that their data is safe, and that the management of their encryption keys is their own responsibility. 
+Client side encryption before network transmission also protects data while on the wire, and as it traverses untrusted networks.
+
+In my project, I propose a change to the Amazon Web Services interface library for Python known as boto \cite{boto}. boto provides an API to interact with many Amazon services, including S3. It does not currently integrate a client side encryption mechanism. My goal is to augment this library to allow the user to automatically encrypt and decrypt their files before sending and after retrieving them from their S3 account.
 
 \section{Related Work}
-related work section
-spider oak
-Wuala
-Viivo Viivo.com
-cloudfogger
+Cloud services and encryption is an area that is currently recieving more attention. Several services for cloud storage exist that emphasize security. Spider Oak \cite{spideroak} is a file hosting and sync service that encrypts all files locally on the client machine before syncing with cloud storage. Viivo \cite{viivo} is a program which integrates with the popular cloud hosting service Dropbox \cite{dropbox}, and claims to encrypt files before they hit the cloud. Cloudfogger \cite{cloudfogger} is a service similar to Viivo.
 
-\subsection{another subsection}
+The AWS SDK for Java \cite{aws-sdk-java} is another programming focused library, similar to boto. This SDK does currently support client-side encryption for S3.
+
+flask and aws \cite{flask}
+https://github.com/sv1jsb/encrypted-flask-aws
+
+
+\subsection{a subsection}
 another subsection
 
