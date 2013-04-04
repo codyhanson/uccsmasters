@@ -2,11 +2,19 @@
 
 import hashlib
 from AESCipher import AESCipher
+import sys
+
+if (len(sys.argv) < 2):
+    print "need a filename"
+    exit(1)
+
+inputname = sys.argv[1]
+
 
 passPhraseName= "MyPhraseName"
 passPhrase = "rosebud"
-inputname = "declaration.txt.{0}".format(passPhraseName)
-outputname = "declaration-decrypted.txt"
+#inputname = "declaration.txt.{0}".format(passPhraseName)
+outputname = "{0}-decrypted.txt".format(inputname)
 
 #obtain ciphertext 
 fh = open(inputname)
@@ -23,4 +31,5 @@ cleartext = aes.decrypt(ciphertext)
 outfile = open(outputname,'w+')
 outfile.write(cleartext) 
 outfile.close()
+print "Completed"
 
