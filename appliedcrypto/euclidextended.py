@@ -3,7 +3,7 @@ import sys
 
 #Euclidean algorithm for greatest common divisor computation
 #enhanced to find values x and y such that ax + by = d = gcd(a,b)
-def euclid(a, b,xminus1,xminus2,yminus1,yminus2):
+def euclid(a, b,xminus1=0,xminus2=1,yminus1=1,yminus2=0):
     if (a == 0 and b == 0):
         return (0,0,0)
     elif (b == 0):
@@ -12,23 +12,19 @@ def euclid(a, b,xminus1,xminus2,yminus1,yminus2):
         q = a/b
         x = xminus2 - q*xminus1
         y = yminus2 - q*yminus1
-        print (b, a % b,q,x,y)
         return euclid(b, a % b,x,xminus1,y,yminus1)
 
 #main
 
-if (len(sys.argv) < 3):
-    print "Usage: euclid [int a] [int b]"
-    sys.exit(-1)
+if __name__ == "__main__":
+    if (len(sys.argv) < 3):
+        print "Usage: euclid [int a] [int b]"
+        sys.exit(-1)
 
-a = int(sys.argv[1])
-b = int(sys.argv[2])
-xminus1 = 0
-yminus1 = 1
-xminus2 = 1
-yminus2 = 0
+    a = int(sys.argv[1])
+    b = int(sys.argv[2])
 
-print "(b, a%b, q, x, y)"
-(d,x,y) =  euclid(a,b,xminus1,xminus2,yminus1,yminus2)
+    print "(b, a%b, q, x, y)"
+    (d,x,y) =  euclid(a,b)
 
-print "(d,x,y) = ", (d,x,y)
+    print "(d,x,y) = ", (d,x,y)

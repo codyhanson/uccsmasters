@@ -10,13 +10,16 @@ from BitVector import BitVector as bv
 
 k = 10
 a = 5
-b = bv(intVal=596, size=k)
+bval = 596
+b = bv(intVal=bval, size=k)
 n = 1234
 
 
+print "performing the naive calculation:"
+print "result:{0}".format(a**bval % n)
 
-print "Performing fast modular exponentiation"
-print "a:{0}, b:{1}, n:{2}".format(a,b,n)
+print "Performing fast modular exponentiation:"
+print "a:{0}, b:{1}, n:{2}".format(a,bval,n)
 c = 0
 f = 1
 for i in reversed(xrange(k)):
