@@ -1,0 +1,20 @@
+\section{Introduction}
+As more data and processing moves to the cloud, security minded users must take steps to ensure data integrity and confidentiality.
+The most prevalent way to accomplish this is to use encryption. 
+By using encryption, users can be sure that cloud operators do not
+obtain unauthorized access to the data, as well as ensure that data is not modified or tampered with while residing in third party data centers.
+
+Some datacenter storage services such as Amazon S3 \cite{amazons3} provide server-side encryption for user data. This technique is inferior to client-side encryption because the integrity of the encryption cannot be guaranteed.
+Their encryption also only protects the data while it is sitting on the disk, and not anywhere else along the flow from server to client.
+With client-side encryption performed before the data is sent to the cloud, users can be guaranteed that their data is safe, and that the management of encryption keys is their own responsibility. 
+Client side encryption before network transmission also protects data while on the wire, and as it traverses untrusted networks.
+
+For my project, I propose a change to the Amazon Web Services interface library for Python known as Boto \cite{boto}. Boto provides an API to interact with many Amazon services, including S3. It does not currently integrate a client-side encryption mechanism. My goal is to augment this library to allow the user to automatically encrypt and decrypt their files before sending and after retrieving them from their S3 account.
+
+\subsection{Amazon S3 Overview}
+The Amazon Simple Storage Service allows users to store and retrieve files via a Web API. Access is granted to AWS subscribers via their API Key and their API Secret. These two values are needed for all operations. In S3, users can create a 'bucket' which is a logical partition of storage. Within a bucket they can PUT and GET their files. At the bucket level, users can specify access permissions, levels of redundancy required, and if server side encryption is to be enabled. Often, data is uploaded to S3 to later be fed into a different Amazon service, such as Elastic Map Reduce, or Elastic Compute Cloud.
+
+\subsection{Advancement of the Field}
+This work is important because it will enable true security via client-side encryption in a popular library for a popular cloud service.
+It might also help users of the Boto library to better understand that server-side encryption provided by cloud operators isn't sufficient for guaranteed data confidentiality an integrity.
+This project will also be beneficial to me as a software developer because it will be the first major opensource project that I will attempt to improve by contributing code changes.

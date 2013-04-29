@@ -1,0 +1,24 @@
+\section{Proposed Approach}
+
+My proposed approach is to modify the Boto Python library to add support for AES 256 bit local encryption. 
+This addition will be an extra option that the developer can choose to use while using boto, and if client-side encryption
+is invoked, it will happen transparently upon file upload and download to the users machine. Encryption will be performed
+using a key specified by the user, and will never be stored in the cloud.
+
+\subsection{Implementation Details}
+
+Boto is an open source Python library which interfaces to many Amazon Web Services API's. I will be able to fork the repository and make my changes to the full source code.
+If the modifications to Boto are successful, I might be able to contribute the work back into the main branch of the software.
+Boto supports single file uploads (up to 5 gigabytes in size) as well as a multipart upload for larger files. I will focus first on the single file upload case, and address multipart upload if there is time.
+
+For cryptographic functions, I propose the use of the open source Pycrypto library \cite{pycrypto}. It has functions for performing DES and AES ciphers, in different modes of operation, as well as several secure hashing functions.
+I will need to determine the best way to pad the data to be encrypted, to fit the AES block size. Another feature which could be handy is to somehow tag the filename of the encrypted file with the name of the user-managed key that performed the encryption. This could help them to programmatically determine which key to use in the decryption phase.
+
+\subsection{Important Implementation Considerations}
+The number one goal will be to not break compatibility with the existing Boto API, and to make the encryption feature optional. Second, I will want to examine the performance impact of adding an encryption step.
+This will be a limited investigation, as the performance of Pycrypto is beyond the scope of this work.
+
+\subsection{Proposed verification techniques}
+In order to verify the correctness of the modified software, the first test case will be to attempt to use the boto S3 API without encryption enabled, and ensure that we can access the files both via boto, as well as from the S3 management console.
+Next, I will enable client-side encryption, push a file to s3, pull it back down, and verify that the contents of the file are intact.
+Finally, to ensure that the AES256 encryption is implemented correctly, I will encrypt a file, push to S3, pull from S3 with a different tool, and decrypt with a different AES library, then verify that the contents are the same.
