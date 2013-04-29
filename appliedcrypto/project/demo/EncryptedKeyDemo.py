@@ -27,5 +27,9 @@ print "done"
 
 sys.stdout.write("getting encrypted content to with a regular key...")
 plainkey = Key(bucket,keyname)
-print plainkey.get_contents_to_filename('./declaration-encrypted-fromS3')
+print "done"
+plainkey.get_contents_to_filename('./declaration-encrypted-fromS3')
+
+sys.stdout.write("getting content and automatically decrypting with an EncryptedKey...")
+ekey.get_contents_to_filename('./declaration-decrypted-boto')
 print "done"
