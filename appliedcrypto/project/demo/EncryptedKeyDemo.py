@@ -31,5 +31,8 @@ print "done"
 plainkey.get_contents_to_filename('./declaration-encrypted-fromS3')
 
 sys.stdout.write("getting content and automatically decrypting with an EncryptedKey...")
-ekey.get_contents_to_filename('./declaration-decrypted-boto')
+#ekey.get_contents_to_filename('./declaration-decrypted-boto')
+ekeyfp = open('./declaration-decrypted-boto','wb')
+ekey.get_contents_to_file(ekeyfp)
+ekeyfp.close()
 print "done"
