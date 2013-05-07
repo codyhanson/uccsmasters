@@ -16,7 +16,7 @@ bucket = conn.create_bucket('cody-test-bucket')
 print "done"
 
 passkey = 'password'
-keyname = 'declaration'
+keyname = 'declaration.txt'
 
 sys.stdout.write("Putting encrypted content to S3...")
 ekey = EncryptedKey(bucket,keyname,passkey)
@@ -28,11 +28,11 @@ print "done"
 sys.stdout.write("getting encrypted content to with a regular key...")
 plainkey = Key(bucket,keyname)
 print "done"
-plainkey.get_contents_to_filename('./declaration-encrypted-fromS3')
+plainkey.get_contents_to_filename('./declaration-encrypted.txt')
 
 sys.stdout.write("getting content and automatically decrypting with an EncryptedKey...")
 #ekey.get_contents_to_filename('./declaration-decrypted-boto')
-ekeyfp = open('./declaration-decrypted-boto','wb')
+ekeyfp = open('./declaration-decrypted.txt','wb')
 ekey.get_contents_to_file(ekeyfp)
 ekeyfp.close()
 print "done"
