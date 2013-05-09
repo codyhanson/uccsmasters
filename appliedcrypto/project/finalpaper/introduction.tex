@@ -18,6 +18,18 @@ after retrieving them from their S3 account.
 \subsection{Amazon S3 Overview}
 The Amazon Simple Storage Service allows users to store and retrieve files via a Web API. Access is granted to AWS subscribers via their API Key and their API Secret. These two values are needed for all operations. In S3, users can create a 'bucket' which is a logical partition of storage. Within a bucket they can PUT and GET their files. At the bucket level, users can specify access permissions, levels of redundancy required, and if server side encryption is to be enabled. Often, data is uploaded to S3 to later be fed into a different Amazon service, such as Elastic Map Reduce, or Elastic Compute Cloud.
 
+\subsection{Client-Side Encryption Superiority}
+One might ask, if Amazon S3 already supports server side encryption, why would a user want to use client side encryption? There are several reasons.
+\begin{itemize}
+    \item Data is not guaranteed to be protected during transport up until the point that the server performs the encryption.
+    \item Security of the key used for the server side encryption cannot be guaranteed.
+    \item Data Integrity cannot be guaranteed, malicious or incidental tampering could occur.
+    \item Cloud providers and Cloud employees cannot be guaranteed to be trustworthy and non-malicous.
+\end{itemize}
+
+You may notice that many of the reasons have the phrase "cannot be guaranteed" in them. This is essentially the cruz of the client-side vs server-side debate.
+The only way to guarantee CIA properties is to perform the cryptographic functions yourself.
+
 \subsection{Advancement of the Field}
 This work is important because it has enabled true security via client-side encryption in a popular library for a popular cloud service.
 It might also help users of the Boto library to better understand that server-side encryption provided by cloud operators isn't sufficient for guaranteed data confidentiality an integrity.
