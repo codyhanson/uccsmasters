@@ -1,6 +1,6 @@
-\section{Proposed Approach}
+\section{Development Approach}
 
-My proposed approach is to modify the Boto Python library to add support for AES 256 bit local encryption. 
+My approach to modify the Boto Python library to add support for AES 256 bit local encryption. 
 This addition will be an extra option that the developer can choose to use while using boto, and if client-side encryption
 is invoked, it will happen transparently upon file upload and download to the users machine. Encryption will be performed
 using a key specified by the user, and will never be stored in the cloud.
