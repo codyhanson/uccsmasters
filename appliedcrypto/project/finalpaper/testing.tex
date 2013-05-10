@@ -1,6 +1,6 @@
 \section{Verification and Testing}
 
-Testing is always an important part of any software project. For this context, verifying that encryption of the files actually took place,
+Testing is always an important part of any software project. In this context, verifying that encryption of the files actually took place,
 and that they successfully can be decrypted was the main focus of my testing efforts. There were also various tests to ensure that
 the API remained compatible with other parts of Boto. In this section, I will cover various testing stategies and challenges, as well as future testing work.
 
@@ -13,7 +13,7 @@ I did run into a few challenges adapting encryption to the framework. In particu
 content length based on plaintext were the most trouble. S3 allows you to specify the MD5 hash of your content as a parameter
 in the API call. Then, if S3 determines that the MD5 of the content you send didn't match the one you specified, the request will fail.
 Similar behavior exists for content length (if there is a mismatch, the request fails). The ciphertext for a given plaintext will always have a different MD5, and very often has a different length in bytes. The unit tests that I was adapting often precomputed MD5's 
-and lengths, which caused me to have to recompute these parameters to ensure that S3 didn't rejec the request.  
+and lengths, which caused me to have to recompute these parameters to ensure that S3 didn't reject the request.  
 
 \subsection{Cryptanalysis}
 
@@ -22,14 +22,14 @@ well tested and well known in the open source software community. If I had tried
 I would have needed to do much more verification of the cryptographic strength of the implementation, and this may have been beyond
 the scope of my expertise.
 
-Even projects that use existing crypto libraries need to be wary of introducting cryptographic vulnerabilities. One such area
+Even projects that use existing crypto libraries need to be wary of introducing cryptographic vulnerabilities. One such area
 that exists in my implementation is the generation of the initialization vector for cipher block chaining. If 
 the vector was not generated with strong randomness, then this could be a vulnerability.
-I used the Random module from Pycrypto to ensure that I was meeting this requirement.
+I used the Random module from Pycrypto to ensure that I was meeting this strong randomness requirement.
 
 \subsection{Potential Future Tests}
 Much of the manual testing and unit tests that I performed handled various common cases. Amazon's web API is very large and complicated,
-and it would be worth it to put in more time to ensure that nothing was overlooked. Both from a security standpoint, and an 
+and it would be worth it to put in more time to ensure that nothing was overlooked, both from a security standpoint, and an 
 error free implementation standpoint.
 
-Another important point that I didn't have time to verify, was the interoperability with other AES implementations. Ensuring that a user would be able to use another conforming AES library to recover their is important. This would also be useful if the encrypted data was to be fed into another cloud service, such as Hadoop, which would be potentially using a different Crypto library.
+Another important point that I didn't have time to verify, was the interoperability with other AES implementations. Ensuring that a user would be able to use another conforming AES library to recover their data is important. This would also be useful if the encrypted data was to be fed into another cloud service, such as Amazon Elastic MapReduce, which would be potentially using a different Crypto library in another programing language.

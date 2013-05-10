@@ -2,12 +2,13 @@
 As more data and processing moves to the cloud, security minded users must take steps to ensure data integrity and confidentiality.
 The most prevalent way to accomplish this is to use encryption. 
 By using encryption, users can be sure that cloud operators do not
-obtain unauthorized access to the data, as well as ensure that data is not modified or tampered with while residing in third party data centers.
+obtain unauthorized access to the data, as well as ensure that data is not modified or tampered with while residing in third-party data centers.
 
 Some datacenter storage services such as Amazon S3 \cite{amazons3} provide server-side encryption for user data. This technique is inferior to client-side encryption because the integrity of the encryption cannot be guaranteed.
-Their encryption also only protects the data while it is sitting on the disk, and not anywhere else along the flow from server to client.
+Their encryption also only protects the data while it is sitting on the disk, and not anywhere else along the transport flow from server to client.
 With client-side encryption performed before the data is sent to the cloud, users can be guaranteed that their data is safe, and that the management of encryption keys is their own responsibility. 
 Client side encryption before network transmission also protects data while on the wire, and as it traverses untrusted networks.
+It can also ensure data integrity by making data tampering detectable.
 
 For my project, I have implemented a change to the Amazon Web Services interface library for Python known as Boto \cite{boto}. 
 Boto provides an API to interact with many Amazon services, including S3. 
@@ -15,23 +16,34 @@ It does not currently integrate a client-side encryption mechanism in the main b
 My goal was to augment this library to allow the user to automatically encrypt and decrypt their files before sending and 
 after retrieving them from their S3 account.
 
+In this section I will provide background on Amazon S3 and the reasons for why I chose this project. In the Development Approach section I 
+will discuss implementation considerations taken while creating this feature. In the next section I will discuss how the 
+software was tested and verified to operate correctly. Finally, I will discuss applications for this feature, and improvements that
+can be made by future work.
+
 \subsection{Amazon S3 Overview}
-The Amazon Simple Storage Service allows users to store and retrieve files via a Web API. Access is granted to AWS subscribers via their API Key and their API Secret. These two values are needed for all operations. In S3, users can create a 'bucket' which is a logical partition of storage. Within a bucket they can PUT and GET their files. At the bucket level, users can specify access permissions, levels of redundancy required, and if server side encryption is to be enabled. Often, data is uploaded to S3 to later be fed into a different Amazon service, such as Elastic Map Reduce, or Elastic Compute Cloud.
+The Amazon Simple Storage Service allows users to store and retrieve files via a Web API. Access is granted to AWS 
+subscribers via their API Key and their API Secret. These two values are needed as parameters for all operations. In S3, 
+users can create a 'bucket' which is a logical volume of storage. Within a bucket they can PUT and GET their files. 
+At the bucket level, users can specify access permissions, levels of redundancy required, and if server side encryption is to 
+be enabled. Often, data is uploaded to S3 to later be fed into a different Amazon service, such as Elastic Map Reduce, or 
+Elastic Compute Cloud.
 
 \subsection{Client-Side Encryption Superiority}
 One might ask, if Amazon S3 already supports server side encryption, why would a user want to use client side encryption? There are several reasons.
 \begin{itemize}
-    \item Data is not guaranteed to be protected during transport up until the point that the server performs the encryption.
+    \item With server side encryption Data is not guaranteed to be protected from eavesdropping during transport up until the point that the server performs the encryption.
     \item Security of the key used for the server side encryption cannot be guaranteed.
     \item Data Integrity cannot be guaranteed, malicious or incidental tampering could occur.
     \item Cloud providers and Cloud employees cannot be guaranteed to be trustworthy and non-malicous.
 \end{itemize}
 
-You may notice that many of the reasons have the phrase "cannot be guaranteed" in them. This is essentially the cruz of the client-side vs server-side debate.
-The only way to guarantee CIA properties is to perform the cryptographic functions yourself.
+You may notice that many of the reasons have the phrase "cannot be guaranteed" in them. This is essentially the crux 
+of the client-side vs server-side debate. The only way to guarantee CIA properties is to perform the cryptographic functions on a
+trusted machine that you control.
 
 \subsection{Advancement of the Field}
-This work is important because it has enabled true security via client-side encryption in a popular library for a popular cloud service.
-It might also help users of the Boto library to better understand that server-side encryption provided by cloud operators isn't sufficient for guaranteed data confidentiality an integrity.
+This work is important because it has enabled true security via client-side encryption in a popular library for a leading cloud service.
+It might also help users of the Boto library to better understand that server-side encryption provided by cloud operators isn't sufficient for guaranteed data confidentiality and integrity.
 This project has also been beneficial to me as a software developer because it will be the first major opensource project that have contributed to.
 

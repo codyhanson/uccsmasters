@@ -1,35 +1,38 @@
 \section{Development Approach}
 
-My approach to modify the Boto Python library to support local encryption is to add an encryption step before pushing files
-to the cloud, and a decryption step after pulling them down.
+My approach to modifying the Boto Python library to support local encryption was to add an encryption step before pushing 
+files to the cloud, and a decryption step after pulling them down.
 This addition will be an extra option that the developer can choose to use while using boto, and if client-side encryption
 is invoked, it will happen transparently upon file upload and download to the users machine. Encryption will be performed
 using a key specified by the user, and the key will never be stored in the cloud.
 
 \subsection{Implementation Details}
 
-Boto is an open source Python library which interfaces to many Amazon Web Services API's. I will be able to fork the repository and make my changes to the full source code.
-If the modifications to Boto are successful, I might be able to contribute the work back into the main branch of the software.
-Boto supports single file uploads (up to 5 gigabytes in size) as well as a multipart upload for larger files. I will focus first on the single file upload case, and address multipart upload if there is time.
+Boto is an open source Python library which interfaces to many Amazon Web Services API's. I have forked the repository 
+on Github and made my changes to the full source code in my own feature branch. Boto supports single file uploads 
+(up to 5 gigabytes in size) as well as a multipart upload for larger files. I have only focused on the single file upload case, thus far.
 
-For cryptographic functions, I propose the use of the open source Pycrypto library \cite{pycrypto}. It has functions 
+For cryptographic functions, I used the open-source Pycrypto library \cite{pycrypto}. It has functions 
 for performing DES and AES ciphers, in different modes of operation, as well as several secure hashing functions. I chose to 
 use AES 256 bit encryption in cipher block chaining mode. Cipher block chaining is more secure than electronic code book 
 because it hides patterns within similar blocks of plaintext. I wrote my own block padding and unpadding functions, and handled initialization vector generation and concatenation (for CBC mode).
 
 \subsection{Maintaining Compatibility}
-One of the top priorities I had while developing was to not break compatibility with the existing Boto API, and to make the 
+One of the top priorities I had while developing my patch was to not break compatibility with the existing Boto API, and to make the 
 encryption feature optional. The best way to do this was to use Python's object oriented features to inherit from the S3 Key class 
 (which enables storage in S3) to create an EncryptedKey class. I was able to override two methods in the Key class so 
-that every piece of data going through the S3 API could be processed the encryption routines defined in EncryptedKey. I didn't have to rewrite any S3 API calls to the cloud, and I didn't need to change any existing code.
+that every piece of data going through the S3 API could be processed by the encryption routines defined in EncryptedKey. 
+I didn't have to rewrite any S3 API calls to the cloud, and I didn't need to change any existing code.
+By not modifying code I was able to reduce the risk of introducing regressions into the core of the library.
 
 \subsection{Comparison to the Java API}
 The official Amazon Web Services Java API has client-side S3 encryption as a top billed feature, so after I finished my own development,
 I wanted to compare their implementation to my own. The Java implementation is open-source and free to use, so I was able to see the details of how things were implemented
 
-The first thing that I noticed  was that Amazon has a Java class called AmazonS3EncryptionClient which extends AmazonS3Client. This is the same strategy that I used in Python. I also saw that the Java API supports Multi-part uploads in conjunction with their client-side encryption. This is a feature that is not present in my implementation.
+The first detail that I noticed  was that Amazon has a Java class called AmazonS3EncryptionClient which extends AmazonS3Client. This is the same strategy that I used in Python. I also saw that the Java API supports Multi-part uploads in conjunction with their client-side encryption. This is a feature that is not present in my implementation.
 
-One feature that I noticed there are 'anonymous' API calls in the AmazonS3EncryptionClient. These allow a user to read a file from 
-S3 without being authenticated (or billed). This class then would allow an anynomous user to also decrypt the file on their host, 
+Another feature that I noticed was that there are 'anonymous' API calls in the AmazonS3EncryptionClient. 
+These allow a user to read a file from S3 without being authenticated (or billed). 
+This class then would allow an anynomous user to also decrypt the publicly accesable file on their host, 
 I also noticed that you can store encryption information in the object metadata. This is a feature I discuss later in the Improvements section.
 

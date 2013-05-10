@@ -1,15 +1,16 @@
 \section{Improvements and Further Work}
 
 While I was able to successfully implement my goal of enabling client-side encryption, there are several aspects
-of the program that could be improved. Some of the key areas for improvement include encryption key management,
+of the feature that could be improved. Some of the key areas for improvement include encryption key management,
 data integrity features, S3 multi-part file uploads, and performance when encrypting very large amounts of data.
 I will also briefly discuss integrating the feature into the Boto project.
 
 \subsection{Key Management}
-Encryption key management is currently a burden placed on the users. When a user creates an EncryptedKey object to store data in S3, they must pass in the string of their key. If they pass in the wrong key, and attempt to get file contents that was encrypted with a different key, their decryption will fail. A feature that would allow the user to determine which key they used would be helpful if the user is deploying more than one key.
+Encryption key management is currently a burden placed on the users. When a user creates an EncryptedKey object to store data in S3, they must pass in the string of their key. If they pass in the wrong key, and attempt to get file contents that were encrypted with a different key, their decryption will fail. A feature that would allow the user to determine which key they used would be helpful if the user is deploying more than one key.
 
 A lightweight option would be to append the S3 Key name with a hint about the encryption key used. This could be used 
-by a users program to lookup the correct encryption key before decrypting. 
+by a users program to lookup the correct encryption key before decrypting. This is similar to the metadata object approach
+that the Java S3 API implements.
 
 \subsection{Data Integrity Checks}
 My implementation does not currently include any authentication hashing which would indicate to a user that their data was tampered with.
@@ -24,7 +25,7 @@ The current maximum filesize for a single upload to S3 is 5 Gigabytes. Boto expo
 single-part uploads, as well as multi-part uploads which support larger file sizes. A multi-part upload chunks very large 
 files into manageable pieces, which are uploaded in parellel and then re-assembled on S3 once all parts have arrived.
 
-The EncryptedKey class currently only protects single-part uploads. Adding mult-part encryption would be a good feature
+The EncryptedKey class currently only protects single-part uploads. Adding multi-part encryption would be a good feature
 to provide, but care should be taken to ensure that the file can be decrypted in the same chunked manner as it was
 encrypted.
 
@@ -45,7 +46,7 @@ As of the writing of this paper, I am working on getting my feature incorporated
 get in contact with project maintainers I will be able to get feedback on my code, and work to improve and further test the
 feature. Boto collaboration is done on Github, and the fork with my code can be found at \cite{CodyBoto} in the 'localencryption' branch.
 
-I have used open-source technology for several years, but have never tried to contribute up till now. I find that Github and other tools like it do a marvelous job of
+I have used open-source technology for several years, but have never tried to contribute up until now. I find that Github and other tools like it do a marvelous job of
 lowering the barrier to entry for people to contribute to projects. Truly anybody can follow development, see the code, and contribute a change, not just the elite members of some inner circle.
 
 
