@@ -28,3 +28,10 @@ pip-log.txt
 
 #vim
 *.swp
+
+.idea/
+
+#virtualenv
+lib/
+include/
+.Python
