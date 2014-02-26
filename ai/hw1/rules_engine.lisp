@@ -47,26 +47,32 @@
 
 (defun applyRule (tree rule)
     ;matches return the applied rule
-  (sub (match tree (lhs rule)) (rhs rule))) 
+  (setf matches (match tree (lhs rule))) 
+  (cond
+    ((not (endp matches)) (sub (rhs rule) matches)) ;there was a match
+    (T tree) ;else just return the tree.
+    )
+  )
+    
 
 (defun match (tree lhsrule)
   (let (associations null) 
-    (setf pairs (mapcar #'list tree lhsrule))
+    (setf pairs (zip-uneven tree lhsrule))
     (print pairs)
     (loop for pair in pairs do 
-     (print '-----1)
-     (print associations)
-     (print pair) 
+     ;(print '-----1)
+     ;(print associations)
+     ;(print pair) 
      (cond 
       ;if the pairs of atoms are equal, then keep going.
-      ((and (atom (nth 0 pair)) (atom (nth 1 pair))) (print 'keepgoing))
+      ((and (atom (nth 0 pair)) (atom (nth 1 pair)) (eq (nth 0 pair) (nth 1 pair))) (print 'keepgoing))
 
       ;if the first is an atom, and the next is a substitution,
       ;like (? x),add to the subs
       ((and (atom (nth 0 pair)) 
           (listp (nth 1 pair)) 
           (eq (nth 0 (nth 1 pair)) '?)
-          (atom (nth 1 (nth 1 pair)))) (setf associations (cons pair associations)))
+          (atom (nth 1 (nth 1 pair)))) (setf associations (cons (list (nth 1 (nth 1 pair)) (nth 0 pair)) associations)))
       ;if not, abort, they don't match. return an empty subs list
       (T (return-from match null))
       ))
@@ -75,6 +81,17 @@
   )
 )
 
+(defun zip-uneven (list1 list2)
+  (cond
+    ((and (endp list1) (endp list2)) '()) ;base case. return empty list.
+    ((and (endp list1) (not (endp list2)))  ;list2 is longer than list1
+      (cons (list NIL (car list2)) (zip-uneven NIL (cdr list2))))
+    ((and (not (endp list1)) (endp list2)) ;list1 is longer than list2
+      (cons (list (car list1) NIL) (zip-uneven (cdr list1) NIL)))
+    (T  ;both the same length
+      (cons (list (car list1) (car list2)) (zip-uneven (cdr list1) (cdr list2))))
+    )
+  )
 
 ;Main program.
 
@@ -93,7 +110,32 @@
 ;(print 'result)
 ;(print result)
 
-(setf result (match '(socrates is a man) '((? x) mortal)))
+
+(setf result (zip-uneven '(1 2 3) '(1 2 3 4 5 6)))
+(print '---------)
+(print 'result)
+(print result)
+
+(setf result (zip-uneven '(1 2 3) '(4 5 6)))
+(print '---------)
+(print 'result)
+(print result)
+
+(setf result (zip-uneven '(1 2 3 3 2 1) '(4 5 6)))
+(print '---------)
+(print 'result)
+(print result)
+
+
+
+
+
+(setf result (applyRule '(socrates man) '((socrates (? x)) (is (? x)))))
+(print '---------)
+(print 'result)
+(print result)
+
+(setf result (applyRule '(socrates is a man) '((socrates (? x)) (is (? x)))))
 (print '---------)
 (print 'result)
 (print result)
