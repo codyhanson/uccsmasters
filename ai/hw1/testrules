@@ -1,0 +1,3 @@
+(Man (? x)) (Mortal (? x))
+(Woman (? x)) (Mortal (? x))
+(God (? x)) (Immortal (? x))
