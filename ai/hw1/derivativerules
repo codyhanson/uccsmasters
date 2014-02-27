@@ -1,0 +1,4 @@
+((? x)) (1) ; ddx x = 1
+((? c)) (0) ; ddx c = 0
+((? v)) (0) ; ddx v = 0, v is a variable other than x
+(plus (? u) (? v) (

@@ -2,27 +2,24 @@
 ;CS5820 Artificial Intelligence
 ;Spring 2014 - Professor Kalita
 
-
+;returns the right hand side of a rule
 (defun rhs (rule)
     (nth 1 rule))
 
+;returns the left hand side of a rule
 (defun lhs (rule)
     (nth 0 rule))
 
+;returns true if the argument is a valid rule. false otherwise
 (defun ruleP (rule)
   (and (listp (nth 0 rule)) ;first item is a list
        (listp (nth 1 rule)) ;second item is a list
        (null  (nth 2 rule))); and there are only 2 items
   )
 
-
+;performs a substitution, with the rhs of a rule, 
+;and an association list of substitutions
 (defun sub (input subs)
-   ;check the first token to decide how to recurse
-   ;(print '------)
-   ;(print subs)
-   ;(print input)
-   ;(print (car input))
-   ;(print (cdr input))
    (cond
      ;if no input, nothing to do.
      ((null input) NIL)
@@ -33,10 +30,6 @@
      ;if it is a nested list, and also a replacement marker (? something), do replacement
      ((and (listp (car input)) (equal (car (car input)) '?)) 
          (loop for pair in subs do
-            ; (print '-loop-)
-            ; (print pair )
-            ; (print (car pair ))
-            ; (print (nth 1 (car input)))
              (if (equal (car pair) (nth 1 (car input))) 
                  (return (cons (nth 1 pair)  (sub (cdr input) subs)))
              )
@@ -54,19 +47,16 @@
     )
   )
     
-
+;Determines whether a rule matches a given piece of text.
+;If so, returns the association list, for the substitution. otherwise, NIL
 (defun match (tree lhsrule)
   (let (associations null) 
     (setf pairs (zip-uneven tree lhsrule))
     (print pairs)
     (loop for pair in pairs do 
-     ;(print '-----1)
-     ;(print associations)
-     ;(print pair) 
      (cond 
       ;if the pairs of atoms are equal, then keep going.
       ((and (atom (nth 0 pair)) (atom (nth 1 pair)) (eq (nth 0 pair) (nth 1 pair))) (print 'keepgoing))
-
       ;if the first is an atom, and the next is a substitution,
       ;like (? x),add to the subs
       ((and (atom (nth 0 pair)) 
@@ -74,13 +64,15 @@
           (eq (nth 0 (nth 1 pair)) '?)
           (atom (nth 1 (nth 1 pair)))) (setf associations (cons (list (nth 1 (nth 1 pair)) (nth 0 pair)) associations)))
       ;if not, abort, they don't match. return an empty subs list
-      (T (return-from match null))
+      (T (return-from match null)) ;TODO should this be NIL instead of null?
       ))
     (print associations)
     (return-from match associations)
   )
 )
 
+;Zips together two lists into pairs of items, even if they are not the same length
+;padds with NIL if one list is longer.
 (defun zip-uneven (list1 list2)
   (cond
     ((and (endp list1) (endp list2)) '()) ;base case. return empty list.
@@ -93,50 +85,37 @@
     )
   )
 
-;Main program.
-
-;(setf result (sub '(color (? x) (? y)) '((x apple) (y red))))
-;(print '---------)
-;(print 'result)
-;(print result)
-
-;(setf result (sub '(color ((? y) so very (? x)) word (? y)) '((x apple) (y red))))
-;(print '---------)
-;(print 'result)
-;(print result)
-
-;(setf result (match '(socrates man) '((? x) mortal)))
-;(print '---------)
-;(print 'result)
-;(print result)
+;Opens a filename and reads lines into a list
+(defun get-file (filename)
+    (with-open-file (stream filename)
+      (loop for line = (read-line stream nil)
+          while line
+          collect line)))
 
 
-(setf result (zip-uneven '(1 2 3) '(1 2 3 4 5 6)))
-(print '---------)
-(print 'result)
-(print result)
+;found this at http://faculty.hampshire.edu/lspector/courses/string-to-list.lisp
+;converts a string of items into a list
+(defun string-to-list (string)
+  "Returns a list of the data items represented in the given list."
+  (let ((the-list nil) ;; we'll build the list of data items here
+        (end-marker (gensym))) ;; a unique value to designate "done"
+    (loop (multiple-value-bind (returned-value end-position)
+                               (read-from-string string nil end-marker)
+            (when (eq returned-value end-marker)
+              (return the-list))
+            ;; if not done, add the read thing to the list
+            (setq the-list 
+                  (append the-list (list returned-value)))
+            ;; and chop the read characters off of the string
+            (setq string (subseq string end-position))))))
 
-(setf result (zip-uneven '(1 2 3) '(4 5 6)))
-(print '---------)
-(print 'result)
-(print result)
+;takes a list of strings, and turns each of them into a list.
+;returns the list of lists
+(defun process-list-of-strings (stringList)
+    (cond 
+      ((null stringList) (list))
+      (T (cons (string-to-list (car stringList)) (process-list-of-strings (cdr stringList))))
+    )
+  )
 
-(setf result (zip-uneven '(1 2 3 3 2 1) '(4 5 6)))
-(print '---------)
-(print 'result)
-(print result)
-
-
-
-
-
-(setf result (applyRule '(socrates man) '((socrates (? x)) (is (? x)))))
-(print '---------)
-(print 'result)
-(print result)
-
-(setf result (applyRule '(socrates is a man) '((socrates (? x)) (is (? x)))))
-(print '---------)
-(print 'result)
-(print result)
 
