@@ -46,6 +46,12 @@
     (T tree) ;else just return the tree.
     )
   )
+
+
+(defun applyAllRules (tree rules)
+
+  )
+ 
     
 ;Determines whether a rule matches a given piece of text.
 ;If so, returns the association list, for the substitution. otherwise, NIL
