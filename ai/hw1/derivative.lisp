@@ -8,7 +8,10 @@
 ;load the rules.
 (setf ruleStrings (get-file "./derivativerules"))
 (setf rulesList (process-list-of-strings ruleStrings))
-(print rulesList)
+
+;load the test cases.
+(setf testDerivatives (get-file "./derivativeTestInput"))
+(setf testDerivativesList (process-list-of-strings testDerivatives))
 
 ;returns true if a list is a single level deep.
 (defun flat-list (aList)
@@ -50,17 +53,22 @@
 ;Main Program
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(setf resultsList (list))
 
+;Run the tests on each case in the input list
+(loop for testCase in testDerivativesList do
+  (print  "----------------------------------------------")
+  (setf input (nth 0 testCase))
+  (setf expectedResult (nth 1 testCase))
+  ;compute the derivative
+  (setf result (ddx input rulesList))
+  ;determine if it matches what we expected.
+  (setf matched (tree-equal  expectedResult result))
+  (format t "input- ~A~&" input)
+  (format t "result- ~A~&" result)
+  (format t "expectedResult- ~A~&" expectedResult)
+  (format t "Match?: ~A~&" matched)
+  (setf resultsList (append resultsList (list matched)))
+)
 
-; test on this.
-(setf expected '(plus (times 2 x) 3))
-(setf input '(plus (power x 2) (times 3 x)))
-(format t "input- ~A~&" input)
-(print 'BeginningDDX)
-(setf result (ddx input rulesList))
-(print 'endDDX)
-(format t "result- ~A~&" result)
-(format t "expected- ~A~&" expected)
-(format t "Match?: ~A~&" (tree-equal  expected result))
-
-
+(format t "~&Finished. Results Array: ~A~&" resultsList)
