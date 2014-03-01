@@ -4,14 +4,19 @@
 
 ;import the rules engine functions
 (load "rules_engine.lisp")
+(print "Rules Engine Loaded")
 
 ;load the rules.
 (setf ruleStrings (get-file "./derivativerules"))
 (setf rulesList (process-list-of-strings ruleStrings))
 
+(print "Rules List Loaded")
+
 ;load the test cases.
 (setf testDerivatives (get-file "./derivativeTestInput"))
 (setf testDerivativesList (process-list-of-strings testDerivatives))
+
+(print "Test case List Loaded")
 
 ;returns true if a list is a single level deep.
 (defun flat-list (aList)
@@ -32,27 +37,33 @@
   (cond
     ;the order of rules is important.
     ((null expression) NIL)
-    ((atom expression) (applyOneRule expression rulesList))
-    ((flat-list expression)
-      (print "flat list Expression")
-      (applyOneRule expression rulesList))
-    ((flat-list (car expression))
-      (print "flatlist Car Expression")
-      (cons (applyOneRule (car expression) rulesList) (ddx (cdr expression) rulesList)))
-    ((listp (nth 0 expression)) 
-      (print "listp nth 0 expression")
-      (cons (ddx (car expression) rulesList) (ddx (cdr expression) rulesList)))
-    ((and (atom (nth 0 expression)) (eq 'DDX (nth 0 expression))) 
-     ;signifies an internal differentiation, like chain rule.
-      (print "atom nth 0 Expression with DDX")
-        (ddx expression rulesList))
     ((atom (nth 0 expression)) 
       (print "atom nth 0 Expression")
-        (applyOneRule (cons (nth 0 expression) (ddx (cdr expression) rulesList)) rulesList))
+        ;(applyOneRule (cons (nth 0 expression) (ddx (cdr expression) rulesList)) rulesList))
+        (embeddedDdx (applyOneRule expression rulesList) rulesList))
     (T (print 'GotDownHere))
     )
   )
 
+;given an expression which has been differentiated once already,
+;search for embedded (DDX ) froms, that require further derivations, and apply the ddx function.
+(defun embeddedDdx (expression rulesList)
+  (print "embeddedDdx")
+  (print expression)
+    (cond
+      ((null expression) NIL)
+      ((atom expression) expression) ;nothing to do!
+      ((and (atom (nth 0 expression)) (eq 'DDX (nth 0 expression))) ;found an embedded ddx 
+       (print "embedded!")
+       (ddx (car (cdr expression)) rulesList))
+      ((atom (nth 0 expression)) 
+        (cons (car expression) (embeddedDdx (cdr expression) rulesList)) 
+      )
+      ((listp  (nth 0 expression))
+        (cons (embeddedDdx (car expression) rulesList) (embeddedDdx (cdr expression) rulesList)) 
+      )
+    )
+)
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Main Program
 ;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -76,3 +87,4 @@
 )
 
 (format t "~&Finished. Results Array: ~A~&" resultsList)
+

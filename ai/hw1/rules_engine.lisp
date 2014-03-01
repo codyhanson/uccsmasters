@@ -103,6 +103,13 @@
           (listp (nth 1 pair)) 
           (eq (nth 0 (nth 1 pair)) '?)
           (atom (nth 1 (nth 1 pair)))) (setf associations (cons (list (nth 1 (nth 1 pair)) (nth 0 pair)) associations)))
+      ;if the first is a nested list, and the next is a substitution,
+      ;like (? x),add to the subs
+      ((and (listp (nth 0 pair)) 
+          (listp (nth 1 pair)) 
+          (eq (nth 0 (nth 1 pair)) '?)
+          (atom (nth 1 (nth 1 pair)))) (setf associations (cons (list (nth 1 (nth 1 pair)) (nth 0 pair)) associations)))
+
       ;if not, abort, they don't match. return an empty subs list
       (T (return-from match null)) ;TODO should this be NIL instead of null?
       ))
