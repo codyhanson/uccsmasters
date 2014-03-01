@@ -1,3 +1,11 @@
-(power x (? n) ) (times (? n) x) ; exponent
+(power x (? n) ) (times (? n) (power x (difference (? n) 1))) ; exponentiation by constant
 (times (? n) x) ((? n)) ; multiplication by constant
 ((? n)) (0) ; ddx c = 0
+(x) (1) ; ddx x = 1
+(negative (times 2 x)) (negative 2) ;ddx of a negative is the negative of the derivative of a positive
+(cos (? u)) (times (negative (sin (? u) (ddx (? u))))) ; derivative of cosine
+(sin (? u)) (times (cos (? u) (ddx (? u)))) ; derivative of sin
+(tan (? u)) (times (plus 1 (power (tan (? u)) 2)) (ddx (? u))) ; derivative of tan
+(exp (? u)) (times (exp (? u)) (ddx (? u )) ;derivative of the exponential
+(sqrt (? u)) (times (divide 1 2) (divide (ddx (? u)) (sqrt (? u))))
+(log (? u)) (divide (ddx (? u)) (? u)) ; logarithms.

@@ -42,6 +42,10 @@
     ((listp (nth 0 expression)) 
       (print "listp nth 0 expression")
       (cons (ddx (car expression) rulesList) (ddx (cdr expression) rulesList)))
+    ((and (atom (nth 0 expression)) (eq 'DDX (nth 0 expression))) 
+     ;signifies an internal differentiation, like chain rule.
+      (print "atom nth 0 Expression with DDX")
+        (ddx expression rulesList))
     ((atom (nth 0 expression)) 
       (print "atom nth 0 Expression")
         (applyOneRule (cons (nth 0 expression) (ddx (cdr expression) rulesList)) rulesList))
