@@ -57,19 +57,32 @@
 (defun applyAllRules (tree rules)
   (print 'applyingRules)
   (loop for rule in rules do (setf tree (applyRule tree rule)))
-  (format t "tree after all rules:~S~%" tree)
+  (format t "tree after all rules: ~A~&" tree)
   tree
 )
 
 ;Iterates through a list of rules, applying the first one that matches
 ;If a rule doesn't match, the tree is passed over unaffected.
 (defun applyOneRule (tree rules)
-  (print 'applyingOneRule)
+  (print "applying One Rule")
   (loop for rule in rules do 
      (setf newtree (applyRule tree rule))
      ;if the newtree is different, we know a rule was applied. so stop looping
-     (if (not (tree-equal tree newtree)) (return-from applyOneRule newTree))
+     (if (not (tree-equal tree newtree)) 
+       ;if the newTree is a single 1 element list
+       ;we want to simplify it and convert it into an atom.
+     (progn
+       (if (and (eq 1 (list-length newtree)) (atom (car newtree)))
+         (setf newtree (car newtree))
+       )
+       ;now return the tree with the one rule applied
+       (format t "applying One Rule newtree: ~A~%" newtree)
+       (return-from applyOneRule newtree)
+     )
+     )
   )
+  ;otherwise, just return tree, no rules were applied.
+  tree
 )
  
  
@@ -79,7 +92,7 @@
 (defun match (tree lhsrule)
   (let (associations null) 
     (setf pairs (zip-uneven tree lhsrule))
-    (print pairs)
+    (format t "Match Pairs ~S~%" pairs)
     (loop for pair in pairs do 
      (cond 
       ;if the pairs of atoms are equal, then keep going.
@@ -93,7 +106,7 @@
       ;if not, abort, they don't match. return an empty subs list
       (T (return-from match null)) ;TODO should this be NIL instead of null?
       ))
-    (print associations)
+    (format t "Match Associations: ~S~%" associations)
     (return-from match associations)
   )
 )

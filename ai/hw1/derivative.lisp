@@ -41,7 +41,7 @@
       (cons (ddx (car expression) rulesList) (ddx (cdr expression) rulesList)))
     ((atom (nth 0 expression)) 
       (print "atom nth 0 Expression")
-      (cons (ddx (cons (nth 0 expression) (ddx (cdr expression) rulesList)) rulesList)))
+        (applyOneRule (cons (nth 0 expression) (ddx (cdr expression) rulesList)) rulesList))
     (T (print 'GotDownHere))
     )
   )
@@ -55,15 +55,12 @@
 ; test on this.
 (setf expected '(plus (times 2 x) 3))
 (setf input '(plus (power x 2) (times 3 x)))
-(print 'input-)
-(print input)
+(format t "input- ~A~&" input)
 (print 'BeginningDDX)
 (setf result (ddx input rulesList))
 (print 'endDDX)
-(print 'result-)
-(print result)
-(print 'expected-)
-(print expected)
-(print (tree-equal  expected result))
+(format t "result- ~A~&" result)
+(format t "expected- ~A~&" expected)
+(format t "Match?: ~A~&" (tree-equal  expected result))
 
 
