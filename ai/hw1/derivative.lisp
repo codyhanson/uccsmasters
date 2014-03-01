@@ -12,23 +12,37 @@
 
 ;returns true if a list is a single level deep.
 (defun flat-list (aList)
-  (cond 
-    ((atom aList) NIL)
-    ((endp aList) T)
-    ((atom (car aList)) (flat-list (cdr aList))) 
-    ((listp (car aList)) NIL)
-   )
+  (if (atom aList) 
+    (return-from flat-list NIL))
+  (loop for item in aList do
+    (cond
+      ((not (atom item)) (return-from flat-list NIL))
+    )
+  )
+  T
 )
 
 ;Define our derivative function.
 (defun ddx (expression rulesList)
+  (terpri)
+  (format t "expression: ~S~%" expression)
   (cond
-    ((listp (car expression)) 
-      (cons (ddx (car expression) rulesList) (ddx (cdr expression) rulesList)))
+    ;the order of rules is important.
+    ((null expression) NIL)
+    ((atom expression) (applyOneRule expression rulesList))
     ((flat-list expression)
-      (applyAllRules expression rulesList))
+      (print "flat list Expression")
+      (applyOneRule expression rulesList))
     ((flat-list (car expression))
-      (cons (applyAllRules (car expression) rulesList)) (ddx (cdr expression) rulesList))
+      (print "flatlist Car Expression")
+      (cons (applyOneRule (car expression) rulesList) (ddx (cdr expression) rulesList)))
+    ((listp (nth 0 expression)) 
+      (print "listp nth 0 expression")
+      (cons (ddx (car expression) rulesList) (ddx (cdr expression) rulesList)))
+    ((atom (nth 0 expression)) 
+      (print "atom nth 0 Expression")
+      (cons (ddx (cons (nth 0 expression) (ddx (cdr expression) rulesList)) rulesList)))
+    (T (print 'GotDownHere))
     )
   )
 
@@ -40,7 +54,16 @@
 
 ; test on this.
 (setf expected '(plus (times 2 x) 3))
-(setf result (ddx '(plus (power x 2) (times 3 x))))
+(setf input '(plus (power x 2) (times 3 x)))
+(print 'input-)
+(print input)
+(print 'BeginningDDX)
+(setf result (ddx input rulesList))
+(print 'endDDX)
+(print 'result-)
 (print result)
+(print 'expected-)
 (print expected)
 (print (tree-equal  expected result))
+
+

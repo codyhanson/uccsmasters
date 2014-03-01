@@ -1,5 +1,3 @@
-((? x)) (1) ; ddx x = 1
-((? c)) (0) ; ddx c = 0
-((? v)) (0) ; ddx v = 0, v is a variable other than x
 (power x (? n) ) (times (? n) x) ; exponent
 (times (? n) x) ((? n)) ; multiplication by constant
+((? n)) (0) ; ddx c = 0

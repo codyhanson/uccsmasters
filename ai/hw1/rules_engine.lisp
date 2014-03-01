@@ -38,7 +38,11 @@
      ((listp (car input)) (cons (sub (car input) subs) (sub (cdr input) subs)))
     ))
 
+;Applys a single rule to an arbitrary tree structure.
 (defun applyRule (tree rule)
+  (terpri)
+  (format t "tree: ~S~%" tree)
+  (format t "rule: ~S~%" rule)
     ;matches return the applied rule
   (setf matches (match tree (lhs rule))) 
   (cond
@@ -48,9 +52,26 @@
   )
 
 
+;Iterates through a list of rules, applying each of them in order.
+;If a rule doesn't match, the tree is passed over unaffected.
 (defun applyAllRules (tree rules)
+  (print 'applyingRules)
+  (loop for rule in rules do (setf tree (applyRule tree rule)))
+  (format t "tree after all rules:~S~%" tree)
+  tree
+)
 
+;Iterates through a list of rules, applying the first one that matches
+;If a rule doesn't match, the tree is passed over unaffected.
+(defun applyOneRule (tree rules)
+  (print 'applyingOneRule)
+  (loop for rule in rules do 
+     (setf newtree (applyRule tree rule))
+     ;if the newtree is different, we know a rule was applied. so stop looping
+     (if (not (tree-equal tree newtree)) (return-from applyOneRule newTree))
   )
+)
+ 
  
     
 ;Determines whether a rule matches a given piece of text.
