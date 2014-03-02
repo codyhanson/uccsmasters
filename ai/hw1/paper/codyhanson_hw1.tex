@@ -7,7 +7,7 @@
 
 \begin{document}
 
-\title{CS5860 AI - Homework 1}
+\title{CS5820 AI - Homework 1}
 \author{Cody Hanson\\
 University of Colorado Colorado Springs\\
 1420 Austin Bluffs Pkwy\\
@@ -23,14 +23,101 @@ to build a symbolic differentiation system, which can take derivatives of arbitr
 \end{abstract}
 
 \section{Introduction}
+One of the key things to consider when approaching this problem, is which
+tool to use during implementation. The examples were mostly in Lisp syntax
+which hinted that perhaps Lisp would be an ideal match for this kind
+of problem. I initially started out using Python to code my rules engine,
+but I quickly found it to be kind of unwieldy, when manipulating patterns in
+the way that we needed to for this assignment.
+
+I then switched to Lisp, and after a bit of time getting up to speed on the
+language, I found that it was an ideal choice. The ability to easily parse 
+and manipulate arbitrary tree structures proved invaluable for building the
+rules engine and the differentiation program. Lisp was also able to
+succinctly express algorithms using recursion, which help to minimize
+the amount of code that I had to write.
 
 \section{Manipulating Rules}
+The core of my rules engine was implemented by 4 main functions: `sub' for
+taking in a given association list and making substitutions, `match' which determined
+if the left hand side of a rule matched an input string, and if it matched, generate
+association list to be input into `sub', and `applyOneRule', which applied the first
+matching rule from a list of rules, or none if the rules didn't match.
 
-\subsection{Part a}
+The way that I determined if a the left hand side of a rule matched a phrase
+was to implement a `zip-uneven' function, which allowed me to match up the
+elements of a phrase with the elements of a rule, to see if they were compatible.
+`zip-uneve' worked by walking each list and creating pairs of items, and padding
+with NIL in case one list was longer than the other. Then with the `match' function,
+I would walk the pairs and determine if they were equal to each other (in the case of 
+two atoms) or if one atom lined up with a `substitution pattern' such as `(? x)'.
+
+I chose to implement `applyOneRule' with foresight to the differentiation application.
+With differentiation, you woudn't want to apply more than one rule at a time, otherwise
+you wouldn't get the 1st derivative, but the 2nd or 3rd.
+
+
+\subsection{File input techniques}
+I devised a system to be able to read rules from a file, as well as test
+inputs and expected outputs. This enabled the system to be more flexible, and
+easier to add new rules and test inputs, rather than hard code each test case
+in the main program.
+
+In a rules file, there was one rule per line, with the left hand side and right hand side
+being separated by a space. Due to the way Lisp parsed this file, you are allowed to add a
+comment to the end of a line after a valid rule, and it would be ignored.
+
+In a test input file, there would be one test input and expected output pair per line.
+I was able to compute the expected outputs by hand, because I had knowledge of the kinds of
+rules that would be present. By having arbitrarily many test inputs in a file, and a
+main loop in the `rules_engine_demo' program, I was able to easily add new test cases,
+without changing the code, as well as automatically evaluate if the program output
+matched what the expected output was.
 
 \section{Symbolic Differentiation}
 
-Content
+My approach to implementing a differentiation engine was to leverage the rules engine
+to perform a single differentation step, based on rules stored in a file. The key
+next step was to write the rules in such a way such that, if a rule required
+another differentiation step, that the output of the first rule application would have
+an embedded `(ddx <some expression>)' in it. After the top level differentiation step,
+I input the output of that first step into a function which would recursively look
+for embedded `ddx' symbols, which would require the application of another rule.
+This would continue until all embedded `ddx' symbols were evaluated.
+
+
+\subsection{Testing and results}
+To ensure adequate coverage of all cases, I specified a test input that excercised
+every differentiation rule. I also included differentiable internal functions,
+to test that recursive differention was tested, such as in the rules for the cosine.
+
+I was able to obtain successful answers for all expressions that I attempted. The
+answers were programmatically checked against a human derived lisp format string
+using the lisp function `tree-equal'.
+
+
+\subsection{Future Work}
+One way that I could improve my system is to find a way to mitigate stack overflow issues.
+Due to the use of recursion, given a sufficiently complex input, it could cause the
+Common Lisp interpreter to suffer a stack overflow error, due to too many recursive calls.
+
+Partial differentiation, with respect to variables besides `x' could also be a good improvement,
+to allow for use in more complex mathematical problems.
+
+Allowing the user to have an interactive input on the command line would enable the testing of
+expressions without adding them to the test input file. If possible being able to 
+specify the expected output as well could allow the program to automatically check
+the success of the differentiation would reduce human error, similarly to how I implemented
+automatic checking in my file input method.
+
+Another thing to consider, is that of the rules database files. Currently they are applied
+in the order they are in the file, such that the first to match will win. Care should be 
+taken to ensure that rules for differentiation are placed in the correct order.
+
+Finally, given more time, it would be a big improvement to implement some simplification logic.
+For instance, if there was a term such as `(difference 2 1)' this could easily be
+evaluated to `1'. This would make some of the output expressions less lengthy, and 
+easier for a human to process.
 
 %adjust the style so we can display terminal output properly.
 \onecolumn
@@ -38,22 +125,27 @@ Content
 
 \newpage
 \section{Appendix A - Rules Engine Code and Output}
+\subsection{Rules Engine Code}
 \lstinputlisting[language=lisp, frame=single]{../rules_engine.lisp}
+\subsection{Rules Engine Demo Code}
 \lstinputlisting[language=lisp]{../rules_engine_demo.lisp}
-
+\subsection{Rules Engine Demo Rules}
+\lstinputlisting{test_rules.txt}
+\subsection{Rules Engine Demo Input}
+\lstinputlisting{test_phrases.txt}
+\subsection{Rules Engine Demo Output}
 \lstinputlisting{rules_engine_demo_output.txt}
-\verbatiminput{test_rules.txt}
-\verbatiminput{test_phrases.txt}
 
 
 \newpage
 \section{Appendix B - Differentiation Code and Output}
+\subsection{Differentiation Code}
 \lstinputlisting[language=lisp]{../derivative.lisp}
-
-
-\verbatiminput{derivative_output.txt}
-\verbatiminput{derivative_rules.txt}
-\verbatiminput{derivative_test_input.txt}
-
+\subsection{Differentiation Rules}
+\lstinputlisting{derivative_rules.txt}
+\subsection{Differentiation Test Input}
+\lstinputlisting{derivative_test_input.txt}
+\subsection{Differentiation Test Output}
+\lstinputlisting{derivative_output.txt}
 
 \end{document}
