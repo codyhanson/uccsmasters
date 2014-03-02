@@ -1,3 +1,4 @@
 (Man (? x)) (Mortal (? x))
 (Woman (? x)) (Mortal (? x))
 (God (? x)) (Immortal (? x))
+(Good things are (? e)) (Is your product very (? e))

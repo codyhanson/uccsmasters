@@ -32,14 +32,11 @@
 
 ;Define our derivative function.
 (defun ddx (expression rulesList)
-  (terpri)
-  (format t "expression: ~S~%" expression)
+  ;(format t "expression: ~S~%" expression)
   (cond
     ;the order of rules is important.
     ((null expression) NIL)
     ((atom (nth 0 expression)) 
-      (print "atom nth 0 Expression")
-        ;(applyOneRule (cons (nth 0 expression) (ddx (cdr expression) rulesList)) rulesList))
         (embeddedDdx (applyOneRule expression rulesList) rulesList))
     (T (print 'GotDownHere))
     )
@@ -48,19 +45,18 @@
 ;given an expression which has been differentiated once already,
 ;search for embedded (DDX ) froms, that require further derivations, and apply the ddx function.
 (defun embeddedDdx (expression rulesList)
-  (print "embeddedDdx")
-  (print expression)
+  ;(print "embeddedDdx")
+  ;(print expression)
     (cond
       ((null expression) NIL)
       ((atom expression) expression) ;nothing to do!
       ((and (atom (nth 0 expression)) (eq 'DDX (nth 0 expression))) ;found an embedded ddx 
-       (print "embedded!")
        (ddx (car (cdr expression)) rulesList))
       ((atom (nth 0 expression)) 
         (cons (car expression) (embeddedDdx (cdr expression) rulesList)) 
       )
       ((listp  (nth 0 expression))
-        (cons (embeddedDdx (car expression) rulesList) (embeddedDdx (cdr expression) rulesList)) 
+        (cons (embeddedDdx (car expression) rulesList) (embeddedDdx (cdr expression) rulesList))
       )
     )
 )
@@ -79,7 +75,7 @@
   (setf result (ddx input rulesList))
   ;determine if it matches what we expected.
   (setf matched (tree-equal  expectedResult result))
-  (format t "input- ~A~&" input)
+  (format t "~&input- ~A~&" input)
   (format t "result- ~A~&" result)
   (format t "expectedResult- ~A~&" expectedResult)
   (format t "Match?: ~A~&" matched)

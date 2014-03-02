@@ -40,9 +40,8 @@
 
 ;Applys a single rule to an arbitrary tree structure.
 (defun applyRule (tree rule)
-  (terpri)
-  (format t "tree: ~S~%" tree)
-  (format t "rule: ~S~%" rule)
+  ;(format t "tree: ~S~%" tree)
+  ;(format t "rule: ~S~%" rule)
     ;matches return the applied rule
   (setf matches (match tree (lhs rule))) 
   (cond
@@ -55,16 +54,16 @@
 ;Iterates through a list of rules, applying each of them in order.
 ;If a rule doesn't match, the tree is passed over unaffected.
 (defun applyAllRules (tree rules)
-  (print 'applyingRules)
+  ;(print 'applyingRules)
   (loop for rule in rules do (setf tree (applyRule tree rule)))
-  (format t "tree after all rules: ~A~&" tree)
+  ;(format t "tree after all rules: ~A~&" tree)
   tree
 )
 
 ;Iterates through a list of rules, applying the first one that matches
 ;If a rule doesn't match, the tree is passed over unaffected.
 (defun applyOneRule (tree rules)
-  (print "applying One Rule")
+  ;(print "applying One Rule")
   (loop for rule in rules do 
      (setf newtree (applyRule tree rule))
      ;if the newtree is different, we know a rule was applied. so stop looping
@@ -76,7 +75,7 @@
          (setf newtree (car newtree))
        )
        ;now return the tree with the one rule applied
-       (format t "applying One Rule newtree: ~A~%" newtree)
+       ;(format t "applying One Rule newtree: ~A~%" newtree)
        (return-from applyOneRule newtree)
      )
      )
@@ -92,11 +91,11 @@
 (defun match (tree lhsrule)
   (let (associations null) 
     (setf pairs (zip-uneven tree lhsrule))
-    (format t "Match Pairs ~S~%" pairs)
+    ;(format t "Match Pairs ~S~%" pairs)
     (loop for pair in pairs do 
      (cond 
       ;if the pairs of atoms are equal, then keep going.
-      ((and (atom (nth 0 pair)) (atom (nth 1 pair)) (eq (nth 0 pair) (nth 1 pair))) (print 'keepgoing))
+      ((and (atom (nth 0 pair)) (atom (nth 1 pair)) (eq (nth 0 pair) (nth 1 pair))) T)
       ;if the first is an atom, and the next is a substitution,
       ;like (? x),add to the subs
       ((and (atom (nth 0 pair)) 
@@ -113,7 +112,7 @@
       ;if not, abort, they don't match. return an empty subs list
       (T (return-from match null)) ;TODO should this be NIL instead of null?
       ))
-    (format t "Match Associations: ~S~%" associations)
+    ;(format t "Match Associations: ~S~%" associations)
     (return-from match associations)
   )
 )

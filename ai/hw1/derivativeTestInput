@@ -1,13 +1,14 @@
 (times 100 x) 100 ;multiplication by constant
+(times (power x 2) (power x 5)) (plus (times (power x 2) (times 5 (power x (difference 5 1)))) (times (power x 5) (times 2 (power x (difference 2 1)))))
+(divide (power x 2) (power x 5)) (divide (difference (times (power x 2) (times 5 (power x (difference 5 1)))) (times (power x 5) (times 2 (power x (difference 2 1))))) (power (power x 5) 2))
 (power x 2) (times 2 (power x (difference 2 1))) ;x raised to a power
-(plus (power x 2) (times 3 x))  (plus (times 2 (power x (difference 2 1)) 3)) ;derivitive of sum is sum of derivatives
+(plus (power x 2) (times 3 x))  (plus (times 2 (power x (difference 2 1))) 3) ;derivitive of sum is sum of derivatives
 (difference (power x 2) (times 3 x))  (difference (times 2 (power x (difference 2 1))) 3)
 (cos (power x 2)) (times (negative (sin (power x 2))) (times 2 (power x (difference 2 1))))
 (sin (power x 2)) (times (cos (power x 2)) (times 2 (power x (difference 2 1))))
-(tan (power x 2)) (times (cos (power x 2)) (times 2 (power x (difference 2 1))))
-(tan (power x 2)) (times (plus 1 (power (tan (power x 2)))) (times 2 (power x (difference 2 1)))) ; derivative of tan
+(tan (power x 2)) (times (plus 1 (power (tan (power x 2)) 2)) (times 2 (power x (difference 2 1)))) ; derivative of tan
 (exp (power x 2)) (times (exp (power x 2)) (times 2 (power x (difference 2 1))))
 (log (power x 100)) (divide (times 100 (power x (difference 100 1))) (power x 100))
-(sqrt (power x 2)) (times (divide 1 2) (divide ((times 2 (power x (difference 2 1)))) (sqrt (power x 2))))
+(sqrt (power x 2)) (times (divide 1 2) (divide (times 2 (power x (difference 2 1))) (sqrt (power x 2))))
 (x) 1 ;derivation of x
 (10) 0 ;derivation of a constant
