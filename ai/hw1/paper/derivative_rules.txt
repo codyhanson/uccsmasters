@@ -1,0 +1,15 @@
+(power x (? n) ) (times (? n) (power x (difference (? n) 1))) ; exponentiation by constant
+(plus (? u) (? v)) (plus (ddx (? u)) (ddx (? v)))
+(difference (? u) (? v)) (difference (ddx (? u)) (ddx (? v)))
+(times (? n) x) ((? n)) ; multiplication by constant
+(times (? u) (? v)) (plus (times (? u) (ddx (? v))) (times (? v) (ddx (? u)))) ; multiplication by two functions
+(divide (? u) (? v)) (divide (difference (times (? u) (ddx (? v))) (times (? v) (ddx (? u)))) ( power (? v) 2)) ; division of two functions
+(negative (times 2 x)) (negative 2) ;ddx of a negative is the negative of the derivative of a positive
+(cos (? u)) (times (negative (sin (? u))) (ddx (? u))) ; derivative of cosine
+(sin (? u)) (times (cos (? u)) (ddx (? u))) ; derivative of sin
+(tan (? u)) (times (plus 1 (power (tan (? u)) 2)) (ddx (? u))) ; derivative of tan
+(exp (? u)) (times (exp (? u)) (ddx (? u ))) ;derivative of the exponential
+(sqrt (? u)) (times (divide 1 2) (divide (ddx (? u)) (sqrt (? u))))
+(log (? u)) (divide (ddx (? u)) (? u)) ; logarithms.
+(x) (1) ; ddx x = 1 needs to be above ddx c = 0
+((? n)) (0) ; ddx c = 0

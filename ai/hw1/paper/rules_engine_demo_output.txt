@@ -1,0 +1,25 @@
+
+"----------------------------------------------" 
+input- (MAN SOCRATES)
+result- (MORTAL SOCRATES)
+expectedResult- (MORTAL SOCRATES)
+
+"----------------------------------------------" 
+input- (WOMAN MADONNA)
+result- (MORTAL MADONNA)
+expectedResult- (MORTAL MADONNA)
+
+"----------------------------------------------" 
+input- (GOD ATHENA)
+result- (IMMORTAL ATHENA)
+expectedResult- (IMMORTAL ATHENA)
+
+"----------------------------------------------" 
+input- (GOOD THINGS ARE EXPENSIVE)
+result- (IS YOUR PRODUCT VERY EXPENSIVE)
+expectedResult- (IS YOUR PRODUCT VERY EXPENSIVE)
+
+"----------------------------------------------" 
+input- (X)
+result- (1)
+expectedResult- (1)

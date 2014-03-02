@@ -3,6 +3,7 @@
 \usepackage{times}
 \usepackage{helvet}
 \usepackage{courier}
+\usepackage{listings}
 
 \begin{document}
 
@@ -15,7 +16,9 @@ chanson@uccs.edu}
 \maketitle
 \begin{abstract}
 \begin{quote}
-asdfasd
+This assignment's goal was to build a `rules engine' which could apply patterns to text.
+As a practical application of our rules engine, we were also tasked with putting it to work using it
+to build a symbolic differentiation system, which can take derivatives of arbitrary mathematical expressions.
 \end{quote}
 \end{abstract}
 
@@ -28,5 +31,29 @@ asdfasd
 \section{Symbolic Differentiation}
 
 Content
+
+%adjust the style so we can display terminal output properly.
+\onecolumn
+%\addtolength{\oddsidemargin}{-.5in}
+
+\newpage
+\section{Appendix A - Rules Engine Code and Output}
+\lstinputlisting[language=lisp, frame=single]{../rules_engine.lisp}
+\lstinputlisting[language=lisp]{../rules_engine_demo.lisp}
+
+\lstinputlisting{rules_engine_demo_output.txt}
+\verbatiminput{test_rules.txt}
+\verbatiminput{test_phrases.txt}
+
+
+\newpage
+\section{Appendix B - Differentiation Code and Output}
+\lstinputlisting[language=lisp]{../derivative.lisp}
+
+
+\verbatiminput{derivative_output.txt}
+\verbatiminput{derivative_rules.txt}
+\verbatiminput{derivative_test_input.txt}
+
 
 \end{document}

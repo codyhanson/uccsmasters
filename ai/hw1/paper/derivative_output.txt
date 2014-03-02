@@ -1,0 +1,108 @@
+
+"Rules Engine Loaded" 
+"Rules List Loaded" 
+"Test case List Loaded" 
+"----------------------------------------------" 
+input- (TIMES 100 X)
+result- 100
+expectedResult- 100
+Match?: T
+
+"----------------------------------------------" 
+input- (TIMES (POWER X 2) (POWER X 5))
+result- 
+(PLUS (TIMES (POWER X 2) (TIMES 5 (POWER X (DIFFERENCE 5 1))))
+ (TIMES (POWER X 5) (TIMES 2 (POWER X (DIFFERENCE 2 1)))))
+expectedResult- 
+(PLUS (TIMES (POWER X 2) (TIMES 5 (POWER X (DIFFERENCE 5 1))))
+ (TIMES (POWER X 5) (TIMES 2 (POWER X (DIFFERENCE 2 1)))))
+Match?: T
+
+"----------------------------------------------" 
+input- (DIVIDE (POWER X 2) (POWER X 5))
+result- 
+(DIVIDE
+ (DIFFERENCE (TIMES (POWER X 2) (TIMES 5 (POWER X (DIFFERENCE 5 1))))
+  (TIMES (POWER X 5) (TIMES 2 (POWER X (DIFFERENCE 2 1)))))
+ (POWER (POWER X 5) 2))
+expectedResult- 
+(DIVIDE
+ (DIFFERENCE (TIMES (POWER X 2) (TIMES 5 (POWER X (DIFFERENCE 5 1))))
+  (TIMES (POWER X 5) (TIMES 2 (POWER X (DIFFERENCE 2 1)))))
+ (POWER (POWER X 5) 2))
+Match?: T
+
+"----------------------------------------------" 
+input- (POWER X 2)
+result- (TIMES 2 (POWER X (DIFFERENCE 2 1)))
+expectedResult- (TIMES 2 (POWER X (DIFFERENCE 2 1)))
+Match?: T
+
+"----------------------------------------------" 
+input- (PLUS (POWER X 2) (TIMES 3 X))
+result- (PLUS (TIMES 2 (POWER X (DIFFERENCE 2 1))) 3)
+expectedResult- (PLUS (TIMES 2 (POWER X (DIFFERENCE 2 1))) 3)
+Match?: T
+
+"----------------------------------------------" 
+input- (DIFFERENCE (POWER X 2) (TIMES 3 X))
+result- (DIFFERENCE (TIMES 2 (POWER X (DIFFERENCE 2 1))) 3)
+expectedResult- (DIFFERENCE (TIMES 2 (POWER X (DIFFERENCE 2 1))) 3)
+Match?: T
+
+"----------------------------------------------" 
+input- (COS (POWER X 2))
+result- (TIMES (NEGATIVE (SIN (POWER X 2))) (TIMES 2 (POWER X (DIFFERENCE 2 1))))
+expectedResult- (TIMES (NEGATIVE (SIN (POWER X 2))) (TIMES 2 (POWER X (DIFFERENCE 2 1))))
+Match?: T
+
+"----------------------------------------------" 
+input- (SIN (POWER X 2))
+result- (TIMES (COS (POWER X 2)) (TIMES 2 (POWER X (DIFFERENCE 2 1))))
+expectedResult- (TIMES (COS (POWER X 2)) (TIMES 2 (POWER X (DIFFERENCE 2 1))))
+Match?: T
+
+"----------------------------------------------" 
+input- (TAN (POWER X 2))
+result- 
+(TIMES (PLUS 1 (POWER (TAN (POWER X 2)) 2))
+ (TIMES 2 (POWER X (DIFFERENCE 2 1))))
+expectedResult- 
+(TIMES (PLUS 1 (POWER (TAN (POWER X 2)) 2))
+ (TIMES 2 (POWER X (DIFFERENCE 2 1))))
+Match?: T
+
+"----------------------------------------------" 
+input- (EXP (POWER X 2))
+result- (TIMES (EXP (POWER X 2)) (TIMES 2 (POWER X (DIFFERENCE 2 1))))
+expectedResult- (TIMES (EXP (POWER X 2)) (TIMES 2 (POWER X (DIFFERENCE 2 1))))
+Match?: T
+
+"----------------------------------------------" 
+input- (LOG (POWER X 100))
+result- (DIVIDE (TIMES 100 (POWER X (DIFFERENCE 100 1))) (POWER X 100))
+expectedResult- (DIVIDE (TIMES 100 (POWER X (DIFFERENCE 100 1))) (POWER X 100))
+Match?: T
+
+"----------------------------------------------" 
+input- (SQRT (POWER X 2))
+result- 
+(TIMES (DIVIDE 1 2)
+ (DIVIDE (TIMES 2 (POWER X (DIFFERENCE 2 1))) (SQRT (POWER X 2))))
+expectedResult- 
+(TIMES (DIVIDE 1 2)
+ (DIVIDE (TIMES 2 (POWER X (DIFFERENCE 2 1))) (SQRT (POWER X 2))))
+Match?: T
+
+"----------------------------------------------" 
+input- (X)
+result- 1
+expectedResult- 1
+Match?: T
+
+"----------------------------------------------" 
+input- (10)
+result- 0
+expectedResult- 0
+Match?: T
+Finished. Results Array: (T T T T T T T T T T T T T T)
