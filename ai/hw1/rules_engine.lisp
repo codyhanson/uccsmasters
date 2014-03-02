@@ -91,6 +91,19 @@
 (defun match (tree lhsrule)
   (let (associations null) 
     (setf pairs (zip-uneven tree lhsrule))
+
+    ;first we address the special case where we have a single atom, and a single replacement.
+    ;this enables doing a direct match and replace, without a larger pattern for context.
+    (if (and  (listp tree) ;its a list
+          (eq 1 (list-length tree)) ;of one length
+          (atom (car tree)) ;and the one thing is a simple atom.
+          (listp lhsrule) ;and the rule is a list 
+          (eq 1 (list-length lhsrule)) ;of one length
+          (atom (car lhsrule)) ;and the one item is an atom
+          (eq (car lhsrule) (car tree))) ;and they match each other
+        (return-from match (cons '(? x) (car lhsrule)))
+     )
+   
     ;(format t "Match Pairs ~S~%" pairs)
     (loop for pair in pairs do 
      (cond 
