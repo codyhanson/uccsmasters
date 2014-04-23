@@ -13,7 +13,7 @@ test_data_file = sys.argv[2]
 
 #read in the dataset, stripping newlines from the end. split each record on a comma, into a tuple.
 training_tuples = []
-for line in [raw_line.strip() for raw_line in open(training_data_file, 'r')]:
+for line in [raw_line.strip().rstrip() for raw_line in open(training_data_file, 'r')]:
     training_tuples.append(tuple(line.split(',')))
 
 
