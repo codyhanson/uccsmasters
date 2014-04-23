@@ -9,7 +9,7 @@ import classify
 
 #command line args
 training_data_file = sys.argv[1]
-test_data_file = sys.argv[2]
+#test_data_file = sys.argv[2]
 
 #read in the dataset, stripping newlines from the end. split each record on a comma, into a tuple.
 training_tuples = []

@@ -2,17 +2,12 @@
 
 #This module implements the C4.5 Algorithm for a decision tree classifier
 from collections import defaultdict
+import math
 
-MINIMUM_SET_SIZE = 20
+MINIMUM_SET_SIZE = 5
 
 #super quick implementation of a tree.
 Tree = lambda: defaultdict(Tree)
-
-#t = Tree()
-
-#t[1][2][3] = 4
-#t[1][3][3] = 5
-#t[1][2]['test'] = 6
 
 
 #recursive function to induce a decision tree from a set of training case data.
@@ -26,22 +21,65 @@ def induce_tree(s):
         return most_common_class(s)
     else:
         #find the information gain of each attribute
-        gains = find_information_gain(s)
-        root_index = choose_root(s)
+        #and split on the node that has the most information gain
+        gains = find_information_gains(s)
+        split_node_index = max_gain_index(gains)
         tree = Tree()
-        partitions = partition_on_attribute(root_index,s)
-        for partition in partitions:
-            tree[root][''] = induce_tree(partition)
+        partitions = partition_on_attribute(split_node_index, s)
+        for key in partitions.keys():
+            tree['decision?'][key] = induce_tree(strip_partition_by_index(split_node_index, partitions[key]))
         return tree
 
+
+#removes the attribute at 'index' from all tuples. returns list of stripped tuples.
+def strip_partition_by_index(index,s):
+    stripped = []
+    for a_tuple in s:
+        tmp = list(a_tuple)
+        del tmp[index]
+        stripped.append(tuple(tmp))
+    return stripped
+
+
 def find_information_gains(s):
-    num_attributes = len(s[0])
-    for i in xrange(num_attributes):
+    num_attributes = len(s[0]) - 1 #don't want to include the class
+    gains = []
+    for i in range(0, num_attributes):
+        probabilities = compute_probabilities(s[i])
+        gains.append(information_gain(probabilities))
+    return gains
 
 
+#for a given set of probabilities, computes the information gain
+def information_gain(probabilities):
+    ig = 0
+    for p in probabilities:
+        ig += - p * math.log(p,2)
+    return ig
 
-def choose_root():
+
+def compute_probabilities(case):
     pass
+
+#returns the index of the highest gain value
+def max_gain_index(gains):
+    max_index = 0
+    max_val = 0
+    for i in range(0,len(gains)):
+        if gains[i] > max_val:
+            max_val = gains[i]
+            max_index = i
+    return max_index
+
+#partitions the set based on values of the attribute at index 'split_index'.
+#a partition will have the same values of the attribute at index
+def partition_on_attribute(split_index, s):
+    partitions = defaultdict(list)
+    for case in s:
+        partitions[case[split_index]].append(case)
+    return partitions
+
+
 
 #in a case tuple, the classification is the last element
 def get_class(case):
