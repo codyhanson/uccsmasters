@@ -45,7 +45,7 @@ def find_information_gains(s):
     num_attributes = len(s[0]) - 1 #don't want to include the class
     gains = []
     for i in range(0, num_attributes):
-        probabilities = compute_probabilities(s[i])
+        probabilities = compute_probabilities(i,s)
         gains.append(information_gain(probabilities))
     return gains
 
@@ -54,12 +54,22 @@ def find_information_gains(s):
 def information_gain(probabilities):
     ig = 0
     for p in probabilities:
-        ig += - p * math.log(p,2)
+        ig += - p * math.log(p, 2)
     return ig
 
 
-def compute_probabilities(case):
-    pass
+def compute_probabilities(index, cases):
+    probabilities = []
+    total = 0.0
+    attr_values = defaultdict(int)
+    for case in cases:
+        total += 1.0
+        attr_values[case[index]] += 1
+    for attr_name in attr_values.keys():
+        probabilities.append(attr_values[attr_name]/total)
+    return probabilities
+
+
 
 #returns the index of the highest gain value
 def max_gain_index(gains):
@@ -71,6 +81,7 @@ def max_gain_index(gains):
             max_index = i
     return max_index
 
+
 #partitions the set based on values of the attribute at index 'split_index'.
 #a partition will have the same values of the attribute at index
 def partition_on_attribute(split_index, s):
@@ -78,7 +89,6 @@ def partition_on_attribute(split_index, s):
     for case in s:
         partitions[case[split_index]].append(case)
     return partitions
-
 
 
 #in a case tuple, the classification is the last element
