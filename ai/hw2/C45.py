@@ -4,7 +4,7 @@
 from collections import defaultdict
 import math
 import re
-from numpy import median
+from numpy import mean
 
 MINIMUM_SET_SIZE = 20
 
@@ -100,11 +100,11 @@ def preprocess_continuous_attrs(schema, cases):
             continue
 
         values = [float(case[i]) for case in modified_cases]
-        med_val = median(values)
+        avg_val = mean(values)
         for j in range(0, len(modified_cases)):
             tmp = list(modified_cases[j])
             number_to_compare = float(modified_cases[j][i])
-            if (number_to_compare <= med_val):
+            if (number_to_compare <= avg_val):
                 tmp[i] = 'low'
             else:
                 tmp[i] = 'high'
@@ -180,8 +180,46 @@ def convert_nested_dd(dd):
     '''
     return {k:convert_nested_dd(v) for k,v in dd.items()} if isinstance(dd, defaultdict) else dd
 
+
 def prune(tree):
-    return tree
+    #fist check to see if tree is a simple leaf
+    if type(tree) is not dict:
+        return tree
+
+    #if all leaf nodes are the same, prune subtree
+    leaf_value = all_leaves_same(tree)
+    if leaf_value:
+        return leaf_value
+    else:
+        #prune all subtrees
+        for k,v in tree.iteritems():
+            tree[k] = prune(v)
+        leaf_value2 = all_leaves_same(tree)
+        if leaf_value2 is None:
+            return tree #can't be further pruned
+        else:
+            return leaf_value2 #remove this whole subtree
+
+#tree has all leaves that are the same.
+#if so, return the value of the leaves. otherwise None
+def all_leaves_same(tree):
+    values = defaultdict(int)
+    for k,v in tree.iteritems():
+        if (type(v) is dict):
+            #nested.
+            val = all_leaves_same(v)
+            if val is None:
+                return None
+            else:
+                values[val] = 1
+        else:
+            values[v] = 1
+    if len(values) == 1:
+        return values.keys()[0] #should only be one key, the leaf value.
+    else:
+        #not all leaves in the subtree were the same.
+        return None
+
 
 #tt = convert_nested_dd(t)
 #pass

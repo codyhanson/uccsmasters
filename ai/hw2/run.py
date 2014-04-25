@@ -23,18 +23,20 @@ for line in [raw_line.strip() for raw_line in open(training_data_file, 'r')]:
 processed_training_tuples = C45.preprocess_continuous_attrs(schema, training_tuples)
 
 tree = C45.induce_tree(schema, processed_training_tuples)
-rules_list = rules.build_rules_list(schema, C45.convert_nested_dd(tree), [])
+tree = C45.convert_nested_dd(tree)
+pruned_tree = C45.prune(tree)
+rules_list = rules.build_rules_list(schema, pruned_tree, [])
 print "-----------------------------------"
 for rule in rules_list:
     print "-----------------------------------"
     print rule
 print "-----------------------------------"
 with open('tree.json','w') as outfile:
-    json.dump(tree, outfile)
+    json.dump(pruned_tree, outfile)
 
 #print json.dumps(tree, indent=1)
 print "-----------------------------------"
-pruned_tree = C45.prune(tree)
+print "Number of Rules generated:{0}".format(len(rules_list))
 
 #then we can format the pruned tree as a list of rules.
 
