@@ -6,7 +6,7 @@ import math
 import re
 from numpy import median
 
-MINIMUM_SET_SIZE = 5
+MINIMUM_SET_SIZE = 20
 
 #super quick implementation of a tree.
 Tree = lambda: defaultdict(Tree)

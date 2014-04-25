@@ -13,9 +13,9 @@ def build_rules_list(schema, tree, prefix):
         print "k:{0}, v:{1}".format(k, v)
         if type(v) is dict:
             #recurse
-            new_prefix = list(prefix)
             for k2, v2 in v.iteritems():
                 if type(v2) is dict:
+                    new_prefix = list(prefix) #clone prefix
                     new_prefix.append(dict({k:k2}))
                     lst = lst + build_rules_list(schema,v2,new_prefix) #merge lists
                 else:
@@ -29,7 +29,6 @@ def build_rules_list(schema, tree, prefix):
             #        entry.append(v)
     return lst
 
-#def build_rule_dfs(tree):
 
 
 #rules is a list of decision tree rules, which themselves are tuples

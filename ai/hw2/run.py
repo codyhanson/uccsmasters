@@ -29,6 +29,9 @@ for rule in rules_list:
     print "-----------------------------------"
     print rule
 print "-----------------------------------"
+with open('tree.json','w') as outfile:
+    json.dump(tree, outfile)
+
 #print json.dumps(tree, indent=1)
 print "-----------------------------------"
 pruned_tree = C45.prune(tree)
