@@ -6,7 +6,7 @@ import math
 import re
 from numpy import mean
 
-MINIMUM_SET_SIZE = 20
+MINIMUM_SET_SIZE = 50
 
 #super quick implementation of a tree.
 Tree = lambda: defaultdict(Tree)
@@ -15,26 +15,26 @@ Tree = lambda: defaultdict(Tree)
 #recursive function to induce a decision tree from a set of training case data.
 def induce_tree(schema, s):
     #first check for base cases
-    if len(schema) is 0:
-        return 'END'#todo what should happen here?
-    elif are_in_same_class(s):
-        #base case! return a leaf node.
-        print "All same class base case for {0} {1}".format(schema, s)
-        return get_class(s[0])
-    elif set_is_small(s):
-        print "Small set base case for {0} {1}".format(schema, s)
+    if len(schema) is 0 or set_is_small(s):
+        #if schema length is zero, it means that there is only one attribute left.
+        #and we can't parition anymore.
+        #print "Small set base case for {0} {1}".format(schema, s)
         #set of cases is below the minimum size, take the most common class as a leaf node
         return most_common_class(s)
+    elif are_in_same_class(s):
+        #base case! return a leaf node.
+        #print "All same class base case for {0} {1}".format(schema, s)
+        return get_class(s[0])
     else:
         #find the information gain of each attribute
         #and split on the node that has the most information gain
         gains = find_information_gains(s)
         split_node_index = max_gain_index(gains)
-        print "Splitting on attr {0} index:{1}".format(schema[split_node_index], split_node_index)
+        #print "Splitting on attr {0} index:{1}".format(schema[split_node_index], split_node_index)
         tree = Tree()
         partitions = partition_on_attribute(split_node_index, s)
         for key in partitions.keys():
-            tree[schema[split_node_index].upper()][key] = \
+            tree[schema[split_node_index]][key] = \
                 induce_tree(strip_schema_by_index(split_node_index, schema), strip_partition_by_index(split_node_index, partitions[key]))
         return tree
 
@@ -94,12 +94,12 @@ def preprocess_continuous_attrs(schema, cases):
     #iterate over each attribute.
     modified_cases = cases
     for i in range(0, len(modified_cases[0]) - 1):
-        print 'Processing {0}'.format(schema[i])
+        #print 'Processing {0}'.format(schema[i])
         if not attribute_is_continuous(i, modified_cases):
             #don't need to process this attribute
             continue
 
-        values = [float(case[i]) for case in modified_cases]
+        values = [float(case[i]) for case in modified_cases if case[i] is not '?']
         avg_val = mean(values)
         for j in range(0, len(modified_cases)):
             tmp = list(modified_cases[j])
@@ -111,12 +111,16 @@ def preprocess_continuous_attrs(schema, cases):
             modified_cases[j] = tuple(tmp)
     return modified_cases
 
+
 def compute_probabilities(index, cases):
     probabilities = []
     total = 0.0
     attr_values = defaultdict(int)
 
     for case in cases:
+        #skip missing values
+        if case[index] is '?':
+            continue
         total += 1.0
         attr_values[case[index]] += 1
     for attr_name in attr_values.keys():
@@ -170,9 +174,6 @@ def most_common_class(cases):
     most_common = sorted(classes, key=classes.get)[-1]
     return most_common
 
-#given a set of values for a continuous attribute, return a set of ranges which partition the space
-def partition_continuous_value(set_of_values):
-    pass
 
 #https://en.wikipedia.org/wiki/Autovivification
 def convert_nested_dd(dd):
@@ -200,6 +201,7 @@ def prune(tree):
         else:
             return leaf_value2 #remove this whole subtree
 
+
 #tree has all leaves that are the same.
 #if so, return the value of the leaves. otherwise None
 def all_leaves_same(tree):
@@ -220,6 +222,3 @@ def all_leaves_same(tree):
         #not all leaves in the subtree were the same.
         return None
 
-
-#tt = convert_nested_dd(t)
-#pass
