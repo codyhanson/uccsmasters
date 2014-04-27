@@ -26,25 +26,82 @@ chanson@uccs.edu}
 \maketitle
 \begin{abstract}
 \begin{quote}
-Abstract
+In this work, a `decision tree' classifier was implemented and tested. Large datasets that included continuous and missing values were used for classifying discrete target classes. A hybrid of the ID3 and C4.5 algorithms was chosen to be implemented using the Python programming language. Statistics for precision, recall, and f-measure were collected over a number of test runs.
 \end{quote}
 \end{abstract}
 
 \section{Introduction}
 
+For this assignment I have implemented a decision tree classifier that has characteristics of ID3 and C4.5. I have chosen the Python programming language, mainly for its ease of use and expressiveness. In this paper, noteable aspects of the design and implementation of the decision tree classifier will be discussed, as well as the datasets users, and the experimental results. Finally, a future work section mentions areas for improvement. Application code and output are included in the appendices.
 
-we'll go with C4.5
-notes:
-'C4.5 is an evolution of ID3, presented by the same author [12]. It uses Gain Ratio as splitting criteria. The splitting is ceased when the number of instances to be splitted is below a certain threshold. Error-Based Pruning is performed after the growing phase. C4.5 is capable to handle numeric attributes. It can induce from a training set that incorporates missing values by using corrected Gain Ratio Criteria as presented in section IX.'
+\section{Datasets}
+To test my decision tree implementation, I used two datasets. One which we will refer to as `AD', which classifies images on the internet as either 'ad' or 'nonad' (as in advertisement). This dataset is from  Nicholas Kushmerick, contains 3279 instances, and each instance has 1558 attributes. AD can be found here: http://archive.ics.uci.edu/ml/datasets/Internet+Advertisements.
+
+The other dataset is `ADULT', which contains demographic information about people around the world, and is used to classify them based on income (greater than 50K dollars, or less than or equal to 50K dollars). There are 48842 instances, and each instance contains 14 attributes. The dataset was donated by Ronny Kohavi and Barry Becker, and can be found here: http://archive.ics.uci.edu/ml/datasets/Adult.
+
+Both datasets contain continuous attributes, as well as a number of missing values.
+
+\section{Decision Tree Creation}
 
 
+\subsection{Missing Values}
+Often data has missing or incomplete attributes. C4.5 was in part created to improve ID3's ability to handle these missing values. By convention, a missing value is denoted by a `?' symbol.
+
+There are three considerations for handling missing attributes. The first is how to handle them while computing information gain for an attribute. I have handled this by following the C4.5 method of simply not including them in the computations. The next consideration is determining how to split a node on an attribute that has cases with missing values. The final consideration is how to classify a new instance that has a missing value.
+
+\subsection{Continuous Valued Attributes}
+
+In order to handle attributes with continuous values, I take a simple approach by splitting the value on the mean, into a 'high' and 'low'.  One assumption that this approach makes is that the training data set are randomly distributed. The implementation approach that I took was to preprocess the training data and rewrite the continuous valued attributes before the data is sent to the decision tree inducing routine.
+
+\subsection{Pruning}
+C4.5 uses a postpruning method, which prunes back a fully grown tree. This is in contrast to a pre-pruning method which has to determine when to stop growing the tree to begin with. The first approach I took to postpruning was to look for subtrees which all had the same class in their leaf nodes, and then to replace the entire subtree with the leaf node value. This technique has the benefit of reducing the size and complexity of the tree, and the rules generated from the tree, but it doesn't necessarily address the issue of overfitting like an error-based pruning method would. Given more time, I would have attempted to implement error based pruning 
+
+\subsection{Generating Rules}
+
+Since a tree can be sometimes difficult to process when it becomes large, it can be convenient to have an alternate view of the classifier data. A common approach is to convert each path from root to leaf in the tree into a rule, which is essentially a series of  AND clauses where each term is a node in the decision tree.
+
+\subsection{Classifying New Data}
+To simplify implementation, I decided to use the rules list data structure to classify new cases rather than traverse a tree. While this approach makes the code simpler, it has the downside of not taking advantage of the properties of traversing the decision tree. Many more comparisons must be made for each case, and many rules which will not apply to a case will need to be checked every time.
 
 \section{Results}
+Each dataset was randomly divided into training and test sets for 10 runs. Values for precision, recall and f-measure were collected for each run and averaged to produce a final score for how the classifier performed for a given dataset.
+
+\begin{center}
+ \begin{tabular}{||c c c c||} 
+ \hline
+ Dataset & Precision & Recall & F-Measure \\ [0.5ex] 
+ \hline\hline
+ ADULT & 6 & 87837 & 787 \\ 
+ \hline
+ AD & 7 & 78 & 5415 \\
+ \hline
+\end{tabular}
+\end{center}
 
 
+\section{Future Work}
+The performance for large datasets could be improved by parallellizeing some of the workload across multiple threads or machines. All code is currently single threaded for simplicity. There are also cases in the implementation where certain values are computed more often than they need to be, and could instead be memoized to increase performance.
+
+The algorithms as implemented also make heavy use of recursion. For large datasets, I found that this can be problematic due to machine limits on recursion depth. In order to handle larger sets, I had to configure my Python environment to allow more than the default 1000 recursive call limit. By converting the code to using standard iteration and loops, this could be mitigated, although at the likely cost of code clarity and brevity.
 
 %Begin appendices
 \onecolumn
 \newpage
+\section{Appendix A - Implementation Files}
+\subsection{C45.py}
+\lstinputlisting[language=python, frame=single]{../C45.py}
+\subsection{rules.py}
+\lstinputlisting[language=python, frame=single]{../rules.py}
+\subsection{classify.py}
+\lstinputlisting[language=python, frame=single]{../classify.py}
+\subsection{run.py - Main Program}
+\lstinputlisting[language=python, frame=single]{../run.py}
+
+\newpage
+\section{Appendix B - Test run output}
+\subsection{Adult Dataset}
+\lstinputlisting[frame=single]{adult_output.txt}
+\subsection{Ad Dataset}
+\lstinputlisting[frame=single]{ad_output.txt}
 
 \end{document}

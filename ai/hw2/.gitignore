@@ -1,0 +1,13 @@
+*.fas
+*.lib
+
+latexian
+*.synctex
+TSWLatexianTemp*
+
+
+#some mac thing?
+.DS_store
+
+#vim
+*.swp
