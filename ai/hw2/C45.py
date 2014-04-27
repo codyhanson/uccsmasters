@@ -75,7 +75,8 @@ def information_gain(probabilities):
 
 def attribute_is_continuous(index, cases):
     continuous = True
-    continuous_pattern = re.compile('[\d\.]+')
+    #match int, decimal or unknown value
+    continuous_pattern = re.compile('^([\d\.]+|\?)$')
     vals = defaultdict(int)
     for case in cases:
         if len(case) < index:
@@ -112,9 +113,12 @@ def preprocess_continuous_attrs(schema, cases):
         values = [float(case[i]) for case in modified_cases if case[i] is not '?']
         avg_val = mean(values)
         for j in range(0, len(modified_cases)):
+            if modified_cases[j][i] == '?':
+                #missing attribute, for this case leave it as is.
+                continue
             tmp = list(modified_cases[j])
             number_to_compare = float(modified_cases[j][i])
-            if (number_to_compare <= avg_val):
+            if number_to_compare <= avg_val:
                 tmp[i] = '<=' + str(avg_val)
             else:
                 tmp[i] = '>' + str(avg_val)
@@ -153,8 +157,24 @@ def max_gain_index(gains):
 #a partition will have the same values of the attribute at index
 def partition_on_attribute(split_index, s):
     partitions = defaultdict(list)
+    missing = []
     for case in s:
-        partitions[case[split_index]].append(case)
+        if case[split_index] == '?':
+            missing.append(case)
+        else:
+            partitions[case[split_index]].append(case)
+
+    #now process the missing cases
+    #each case has a missing value for this attribute.
+    #we put it in each partition, with the attribute set to the
+    #value for that partition
+    for case in missing:
+        tmp = list(case) #so we can modify the tuple
+        for key in partitions.keys():
+            tmp[split_index] = key
+            updated_case = tuple(tmp)
+            partitions[key].append(updated_case)
+
     return partitions
 
 

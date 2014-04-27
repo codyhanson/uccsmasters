@@ -26,63 +26,163 @@ chanson@uccs.edu}
 \maketitle
 \begin{abstract}
 \begin{quote}
-In this work, a `decision tree' classifier was implemented and tested. Large datasets that included continuous and missing values were used for classifying discrete target classes. A hybrid of the ID3 and C4.5 algorithms was chosen to be implemented using the Python programming language. Statistics for precision, recall, and f-measure were collected over a number of test runs.
+In this work, a `decision tree' classifier was implemented and tested. 
+Large datasets that included continuous and missing values were used for 
+classifying discrete target classes. A hybrid of the ID3 and C4.5 algorithms 
+was chosen to be implemented using the Python programming language. 
+Statistics for precision, recall, and f-measure were collected over 
+a number of test runs.
 \end{quote}
 \end{abstract}
 
 \section{Introduction}
 
-For this assignment I have implemented a decision tree classifier that has characteristics of ID3 and C4.5. I have chosen the Python programming language, mainly for its ease of use and expressiveness. In this paper, noteable aspects of the design and implementation of the decision tree classifier will be discussed, as well as the datasets users, and the experimental results. Finally, a future work section mentions areas for improvement. Application code and output are included in the appendices.
+For this assignment I have implemented a decision tree classifier that has 
+characteristics of ID3 and C4.5. I have chosen the Python programming language, 
+mainly for its ease of use and expressiveness. In this paper, noteable aspects 
+of the design and implementation of the decision tree classifier will be 
+discussed, as well as the datasets users, and the experimental results. 
+Finally, a future work section mentions areas for improvement. 
+Application code and output are included in the appendices.
 
 \section{Datasets}
-To test my decision tree implementation, I used two datasets. One which we will refer to as `AD', which classifies images on the internet as either 'ad' or 'nonad' (as in advertisement). This dataset is from  Nicholas Kushmerick, contains 3279 instances, and each instance has 1558 attributes. AD can be found here: http://archive.ics.uci.edu/ml/datasets/Internet+Advertisements.
+To test my decision tree implementation, I used two datasets. 
+One which we will refer to as `AD', which classifies images on the 
+internet as either 'ad' or 'nonad' (as in advertisement). This dataset is 
+from  Nicholas Kushmerick, contains 3279 instances, and each instance has 
+1558 attributes. AD can be found here: http://archive.ics.uci.edu/ml/datasets/Internet+Advertisements.
 
-The other dataset is `ADULT', which contains demographic information about people around the world, and is used to classify them based on income (greater than 50K dollars, or less than or equal to 50K dollars). There are 48842 instances, and each instance contains 14 attributes. The dataset was donated by Ronny Kohavi and Barry Becker, and can be found here: http://archive.ics.uci.edu/ml/datasets/Adult.
+The other dataset is `ADULT', which contains demographic information about 
+people around the world, and is used to classify them based on income 
+(greater than 50K dollars, or less than or equal to 50K dollars). 
+There are 48842 instances, and each instance contains 14 attributes. 
+The dataset was donated by Ronny Kohavi and Barry Becker, 
+and can be found here: http://archive.ics.uci.edu/ml/datasets/Adult.
 
 Both datasets contain continuous attributes, as well as a number of missing values.
 
 \section{Decision Tree Creation}
+The algorithm's that I have chosen to model my inducer on
+are ID3 and C4.5. These are designed to handle classification, for
+discrete target classes. In the case of C4.5, it also has techniques
+to handle missing and continuous values. A key factor in my decision
+was ease of implementation.
 
+My main routine is called `induce_tree' which is a recursive function
+that computes the information gain of the set of cases it has, splits
+on the highest gain and then recurses to the subtrees.
+
+For the minimum set size base case, (the size of partition under 
+which we choose the most common value for the leaf node), I chose 30.
+This was somewhat arbitrary, and it would be interesting to see how this constant
+affects precision and recall.
 
 \subsection{Missing Values}
-Often data has missing or incomplete attributes. C4.5 was in part created to improve ID3's ability to handle these missing values. By convention, a missing value is denoted by a `?' symbol.
+Often data has missing or incomplete attributes. C4.5 was in part created to 
+improve ID3's ability to handle these missing values. By convention,
+a missing value is denoted by a `?' symbol.
 
-There are three considerations for handling missing attributes. The first is how to handle them while computing information gain for an attribute. I have handled this by following the C4.5 method of simply not including them in the computations. The next consideration is determining how to split a node on an attribute that has cases with missing values. The final consideration is how to classify a new instance that has a missing value.
+There are three considerations for handling missing attributes. 
+The first is how to handle them while computing information gain for 
+an attribute. I have handled this by following the C4.5 method of simply 
+not including them in the computations. The next consideration is determining 
+how to split a node on an attribute that has cases with missing values. 
+The final consideration is how to classify a new instance that 
+has a missing value.
+
+I have implemented part of a missing value strategy. I was able to
+easily exclude missing values from information gain computations. 
+Then, when splitting a node on an attribute, for cases that have an
+unknown value for the split attribute, I duplicate that case and add
+it to each outgoing edge, with the missing value replaced by the
+value for that particular partition. I have not implemented any
+weighting of these cases, however, and this would be a good improvement
+to make.
 
 \subsection{Continuous Valued Attributes}
 
-In order to handle attributes with continuous values, I take a simple approach by splitting the value on the mean, into a 'high' and 'low'.  One assumption that this approach makes is that the training data set are randomly distributed. The implementation approach that I took was to preprocess the training data and rewrite the continuous valued attributes before the data is sent to the decision tree inducing routine.
+In order to handle attributes with continuous values, 
+I take a simple approach by splitting the value on the mean, into a 
+'high' and 'low'.  One assumption that this approach makes is that the training 
+data set are randomly distributed. The implementation approach that I took was 
+to preprocess the training data and rewrite the continuous valued attributes 
+before the data is sent to the decision tree inducing routine.
+
+Then, when applying rules to new examples that needed to match a continuous value,
+I had to implement special code which would parse a rule like `<=1000' into 
+an operation (`<=') and a value (`1000'), and compare it to the value of the
+attribute for the case. Regular expressions proved helpful for this operation.
+
+One downside of this simple approach is that it doesn't take into account
+continuous valued attributes that have more than two `regions'. For instance,
+if `Age' is split on `>45' and `<=45', this could potentially not take into 
+account that the `<=45' range significantly changes `<=18', or vice versa for
+the upper ranges.
 
 \subsection{Pruning}
-C4.5 uses a postpruning method, which prunes back a fully grown tree. This is in contrast to a pre-pruning method which has to determine when to stop growing the tree to begin with. The first approach I took to postpruning was to look for subtrees which all had the same class in their leaf nodes, and then to replace the entire subtree with the leaf node value. This technique has the benefit of reducing the size and complexity of the tree, and the rules generated from the tree, but it doesn't necessarily address the issue of overfitting like an error-based pruning method would. Given more time, I would have attempted to implement error based pruning 
+C4.5 uses a postpruning method, which prunes back a fully grown tree. 
+This is in contrast to a pre-pruning method which has to determine when to stop 
+growing the tree to begin with. The first approach I took to postpruning was 
+to look for subtrees which all had the same class in their leaf nodes, and then 
+to replace the entire subtree with the leaf node value. This technique has the 
+benefit of reducing the size and complexity of the tree, and the rules 
+generated from the tree, but it doesn't necessarily address the issue of 
+overfitting like an error-based pruning method would. 
+Given more time, I would have attempted to implement error based pruning 
 
 \subsection{Generating Rules}
-
-Since a tree can be sometimes difficult to process when it becomes large, it can be convenient to have an alternate view of the classifier data. A common approach is to convert each path from root to leaf in the tree into a rule, which is essentially a series of  AND clauses where each term is a node in the decision tree.
+Since a tree can be sometimes difficult to process when it becomes large, it 
+can be convenient to have an alternate view of the classifier data. 
+A common approach is to convert each path from root to leaf in the tree into 
+a rule, which is essentially a series of AND clauses where each term 
+is a node in the decision tree. I implemented a routine which traverses a tree in a depth first manner, 
+compiling a list of rules as it goes. 
 
 \subsection{Classifying New Data}
-To simplify implementation, I decided to use the rules list data structure to classify new cases rather than traverse a tree. While this approach makes the code simpler, it has the downside of not taking advantage of the properties of traversing the decision tree. Many more comparisons must be made for each case, and many rules which will not apply to a case will need to be checked every time.
+To simplify implementation, I decided to use the rules list data structure to 
+classify new cases rather than traverse a tree. While this approach makes the 
+code simpler, it has the downside of not taking advantage of the properties 
+of traversing the decision tree. Many more comparisons must be made for each 
+case, and many rules which will not apply to a case will need to be 
+checked every time.
 
 \section{Results}
-Each dataset was randomly divided into training and test sets for 10 runs. Values for precision, recall and f-measure were collected for each run and averaged to produce a final score for how the classifier performed for a given dataset.
+Each dataset was randomly divided into training and test sets for 10 runs. 
+Values for precision, recall and f-measure were collected for each run and 
+averaged to produce a final score for how the classifier 
+performed for a given dataset.
 
+TODO: table name
 \begin{center}
  \begin{tabular}{||c c c c||} 
  \hline
  Dataset & Precision & Recall & F-Measure \\ [0.5ex] 
  \hline\hline
- ADULT & 6 & 87837 & 787 \\ 
+ ADULT & 0.8439 & 0.8513 &  0.8476 \\ 
  \hline
- AD & 7 & 78 & 5415 \\
+ AD & 0.8672 & 0.5949 &  0.7039 \\
  \hline
 \end{tabular}
 \end{center}
 
+We can see from the F-Measure value, that my algorithm performed better on the
+ADULT dataset, mostly because of the higher average Recall. Precision for both
+datasets was mostly the same, although a bit higher for AD.
+
 
 \section{Future Work}
-The performance for large datasets could be improved by parallellizeing some of the workload across multiple threads or machines. All code is currently single threaded for simplicity. There are also cases in the implementation where certain values are computed more often than they need to be, and could instead be memoized to increase performance.
+The performance for large datasets could be improved by parallellizeing some of 
+the workload across multiple threads or machines. All code is currently single 
+threaded for simplicity. There are also cases in the implementation where 
+certain values are computed more often than they need to be, and could instead 
+be memoized to increase performance.
 
-The algorithms as implemented also make heavy use of recursion. For large datasets, I found that this can be problematic due to machine limits on recursion depth. In order to handle larger sets, I had to configure my Python environment to allow more than the default 1000 recursive call limit. By converting the code to using standard iteration and loops, this could be mitigated, although at the likely cost of code clarity and brevity.
+The algorithms as implemented also make heavy use of recursion. For 
+large datasets, I found that this can be problematic due to machine limits on 
+recursion depth. In order to handle larger sets, I had to configure my Python 
+environment to allow more than the default 1000 recursive call limit. 
+By converting the code to using standard iteration and loops, this could 
+be mitigated, although at the likely cost of code clarity and brevity.
 
 %Begin appendices
 \onecolumn

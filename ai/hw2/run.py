@@ -100,7 +100,7 @@ def compute_stats(total, totalpos, totalneg, tpos, tneg, fpos, fneg):
 #MAIN
 ##############################
 
-seed = 200
+seed = random.randint(1000, 10000)
 random.seed(seed)
 print "Using random seed:{0}".format(seed)
 

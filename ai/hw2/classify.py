@@ -21,7 +21,7 @@ def rule_classify(schema, rules, case):
         #print "trying rule {0} of {1}".format(rule_counter,rule_count)
         rule_counter += 1
         rule_match = True
-        for i in range(0, len(rule) -1):
+        for i in range(0, len(rule) - 1):
             idx = schema.index(rule[i][0]) #index of this attribute
             #we need to check if this rule is a continuous value.
             #and handle it differently than if it was discreet.
