@@ -1,20 +1,9 @@
 
 import re
 
-all_caps = re.compile(r'^[A-Z-]+$')
 continuous_val = re.compile('^(>|<=)([\d\.]+)$')
+
 #given a decision tree and an example, return the determined classification for the unknown example.
-"""
-def classify(schema, tree, case, index):
-    for k, v in tree.iteritems():
-        if re.match(all_caps, k):
-            #a label node. just skip it and
-            #recurse on its children
-            return classify(schema, v, case, schema.index(k))
-        elif :
-            pass
-    pass
-"""
 
 def is_continuous(rule_clause):
     m = re.match(continuous_val, rule_clause[1])

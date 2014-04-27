@@ -4,13 +4,15 @@
 import sys
 import json
 import random
+from numpy import mean
 
 #my libs
 import C45
 import rules
 import classify
 
-
+#some datasets require deep recursion. change Python's default recursion depth.
+sys.setrecursionlimit(10000)
 
 def randomly_divide(data):
     training_set = []
@@ -23,7 +25,7 @@ def randomly_divide(data):
     return training_set, test_set
 
 
-def test_run(schema, data):
+def test_run(positive_classification, schema, data):
     print "Randomly dividing Data into training and test..."
     training_set, test_set = randomly_divide(data)
     print "processing training data to partition continuous attributes..."
@@ -62,14 +64,14 @@ def test_run(schema, data):
         case_classification = case[-1]
         result = classify.rule_classify(schema, rules_list, case)
         if result == case_classification:
-            if result == '<=50K':
+            if result == positive_classification:
                 true_positive_count += 1
                 total_pos += 1
             else:
                 true_negative_count += 1
                 total_neg += 1
         else:
-            if result == '<=50K':
+            if result == positive_classification:
                 false_positive_count += 1
                 total_neg += 1
             else:
@@ -84,6 +86,7 @@ def test_run(schema, data):
                                                 false_positive_count,
                                                 false_negative_count)
     print "Precision: {0}, Recall:{1}, F-measure:{2}".format(precision, recall, fmeasure)
+    return precision, recall, fmeasure
 
 
 def compute_stats(total, totalpos, totalneg, tpos, tneg, fpos, fneg):
@@ -106,20 +109,36 @@ schema_file = sys.argv[1]
 dataset_file = sys.argv[2]
 
 schema = tuple([raw_line.strip().split(', ') for raw_line in open(schema_file, 'r')][0])
+positive_classification = schema[-1] #last item.
+#now remove the last item from the schema list.
+schema = schema[0:len(schema) - 1]
+
 #read in the dataset, stripping newlines from the end. split each record on a comma, into a tuple.
 data_tuples = []
 for line in [raw_line.strip() for raw_line in open(dataset_file, 'r')]:
-    data_tuples.append(tuple(line.split(', ')))
+    tokens = line.split(',')
+    for i in range(0, len(tokens)):
+        tokens[i] = tokens[i].lstrip()
+    data_tuples.append(tuple(tokens))
 
 #now data_tuples contains all of our cases, which we will divide randomly into 3 different segments:
 #2/3 for training, 1/3 for testing. We'll do this 10 times and compute statistics.
 
+precisions = []
+recalls = []
+fmeasures = []
 for run in range(1, 10):
     print "---------------------------------------------------------------------------------------"
     print "Beginning Test run: {0}".format(run)
     results = []
-    test_run(schema, data_tuples)
+    p, r, f = test_run(positive_classification, schema, data_tuples)
+    precisions.append(p)
+    recalls.append(r)
+    fmeasures.append(f)
 
-
+print "---------------------------------------------------------------------------------------"
+print "Average precision: {0}".format(mean(precisions))
+print "Average recall: {0}".format(mean(recalls))
+print "Average fmeasure: {0}".format(mean(fmeasures))
 
 

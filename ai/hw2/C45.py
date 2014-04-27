@@ -6,7 +6,7 @@ import math
 import re
 from numpy import mean
 
-MINIMUM_SET_SIZE = 2
+MINIMUM_SET_SIZE = 30
 
 #super quick implementation of a tree.
 Tree = lambda: defaultdict(Tree)
@@ -72,9 +72,11 @@ def information_gain(probabilities):
     return ig
 
 
+
 def attribute_is_continuous(index, cases):
     continuous = True
     continuous_pattern = re.compile('[\d\.]+')
+    vals = defaultdict(int)
     for case in cases:
         if len(case) < index:
             pass
@@ -82,6 +84,14 @@ def attribute_is_continuous(index, cases):
         if m is None:
             continuous = False
             break
+        else:
+            vals[m.group(0)] += 1
+
+    #special code to handle the case where there is just '0' and '1'
+    if len(vals) == 2 and '0' in vals.keys() and '1' in vals.keys():
+        #just a binary column! not continuous
+        continuous = False
+
     return continuous
 
 
