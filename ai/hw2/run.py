@@ -33,11 +33,27 @@ def test_run(schema, data):
     tree = C45.convert_nested_dd(tree)
     print "Post pruning tree..."
     pruned_tree = C45.prune(tree)
+
+    #this code snippet can dump tree json to a file
+    with open('tree.json', 'w') as outfile:
+        json.dump(pruned_tree, outfile)
+
     print "Generating rules list..."
     rules_list = rules.build_rules_list(schema, pruned_tree, [])
     print "Using rules to classify test data..."
-    success_count = 0
-    failure_count = 0
+    print "Number of Rules:{0}".format(len(rules_list))
+    #we are computing stats based on the criteria of 'correctly identifying <=50K cases'
+    #this is to allow us to compute precision and recall, and f-measure
+    #correctly guessed <=50k
+    true_positive_count = 0
+    #incorrectly guessed <=50k
+    false_positive_count = 0
+    #correctly guessed  >50k
+    true_negative_count = 0
+    #incorrectly guessed < 50k
+    false_negative_count = 0
+    total_pos = 0
+    total_neg = 0
     total_count = 0
     num_tests = len(test_set)
     for case in test_set:
@@ -45,14 +61,37 @@ def test_run(schema, data):
         #print "Classifying {0} of {1} test cases.".format(total_count, num_tests)
         case_classification = case[-1]
         result = classify.rule_classify(schema, rules_list, case)
-        if result is case_classification:
-            #success
-            print "success!"
-            success_count += 1
+        if result == case_classification:
+            if result == '<=50K':
+                true_positive_count += 1
+                total_pos += 1
+            else:
+                true_negative_count += 1
+                total_neg += 1
         else:
-            #failure
-            failure_count += 1
-    print "Success:{0}/{1} - {2}%".format(success_count,total_count, (float(success_count)/total_count) * 100)
+            if result == '<=50K':
+                false_positive_count += 1
+                total_neg += 1
+            else:
+                false_negative_count += 1
+                total_pos += 1
+
+    precision, recall, fmeasure = compute_stats(total_count,
+                                                total_pos,
+                                                total_neg,
+                                                true_positive_count,
+                                                true_negative_count,
+                                                false_positive_count,
+                                                false_negative_count)
+    print "Precision: {0}, Recall:{1}, F-measure:{2}".format(precision, recall, fmeasure)
+
+
+def compute_stats(total, totalpos, totalneg, tpos, tneg, fpos, fneg):
+    precision = tpos / float(tpos + fpos)
+    recall = tpos / float(totalpos)
+    fmeasure = 2 * (precision * recall) / (precision + recall)
+    return precision, recall, fmeasure
+
 
 ##############################
 #MAIN
@@ -83,7 +122,4 @@ for run in range(1, 10):
 
 
 
-#this code snippet can dump tree json to a file
-#with open('tree.json','w') as outfile:
-#    json.dump(pruned_tree, outfile)
 

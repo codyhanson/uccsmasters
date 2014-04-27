@@ -6,7 +6,7 @@ import math
 import re
 from numpy import mean
 
-MINIMUM_SET_SIZE = 50
+MINIMUM_SET_SIZE = 2
 
 #super quick implementation of a tree.
 Tree = lambda: defaultdict(Tree)
@@ -105,9 +105,9 @@ def preprocess_continuous_attrs(schema, cases):
             tmp = list(modified_cases[j])
             number_to_compare = float(modified_cases[j][i])
             if (number_to_compare <= avg_val):
-                tmp[i] = 'low'
+                tmp[i] = '<=' + str(avg_val)
             else:
-                tmp[i] = 'high'
+                tmp[i] = '>' + str(avg_val)
             modified_cases[j] = tuple(tmp)
     return modified_cases
 
